@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAE24 – Volet Télécommunication</title>*
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <nav>
+    <div>
+      <div>
+        <h2>SAE24 – Volet Télécommunication</h2>
+      </div>
+      <ul>
+        <li>
+          <a href="comp1.html">← Page précédente</a>
+          <a href="index.html">← Page d'accueil</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div>
+    <div>
+      <h1> SAE24 – Volet Télécommunication</h1>
+      <p>Exploration du spectre radiofréquence et caractérisation d'un signal ISM perturbateur</p>
+      <div>
+        <span> Durée : 4h + QCM (30 min)</span>
+        <span> Travail : Individuel</span>
+        <span> Équipement : ADALM-PLUTO + Matlab/Simulink</span>
+      </div>
+    </div>
+
+    <div>
+
+      <!-- Description -->
+      <section>
+        <h2> Contexte du projet</h2>
+        <p>
+          Cette SAE s'inscrit dans la compétence RT2 - "Connecter les entreprises et les usagers" au niveau 1
+          "Découvrir les transmissions". L'objectif est d'explorer le spectre radiofréquence d'une bande ISM
+          (f < 1 GHz) en utilisant le logiciel Matlab/Simulink et un émetteur/récepteur SDR : l'ADALM-PLUTO. </p>
+            <div>
+              <h3> Problématique</h3>
+              <ul>
+                <li>Un émetteur perturbateur interfère avec une télécommande de portail</li>
+                <li>Signal présent dans une bande ISM populaire en domotique</li>
+                <li>Nécessité de caractériser ce signal pour le signaler aux autorités</li>
+                <li>Mesures spectrales similaires à celles vues en R205 et SAE22</li>
+              </ul>
+
+              <h3> Objectifs pédagogiques</h3>
+              <ul>
+                <li>Découvrir la réglementation des bandes ISM en Europe</li>
+                <li>Utiliser un récepteur SDR (Software Defined Radio)</li>
+                <li>Réaliser des mesures spectrales professionnelles</li>
+                <li>Analyser la densité spectrale de puissance d'un signal</li>
+                <li>Calculer les conversions entre différentes grandeurs (RMS, Power, Power Density)</li>
+              </ul>
+            </div>
+      </section>
+
+      <!-- Matériel utilisé -->
+      <section>
+        <h2> Matériel et logiciels</h2>
+        <div>
+          <h3> ADALM-PLUTO</h3>
+          <ul>
+            <li><strong>Type :</strong> Émetteur/récepteur SDR (Software Defined Radio)</li>
+            <li><strong>Principe :</strong> Similaire au RTL-SDR utilisé en SAE22</li>
+            <li><strong>Bande de fréquence :</strong> Compatible avec les bandes ISM < 1 GHz</li>
+            <li><strong>Antenne :</strong> Seule l'antenne RX est nécessaire pour la réception</li>
+            <li><strong>Connectivité :</strong> Interface USB avec le PC</li>
+          </ul>
+
+          <h3> Environnement logiciel</h3>
+          <ul>
+            <li><strong>Matlab/Simulink :</strong> Traitement et analyse des signaux</li>
+            <li><strong>Fichier fourni :</strong> "ISMQuest.slx" pour l'interface d'analyse</li>
+            <li><strong>Spectrum Analyser :</strong> Outil intégré pour l'analyse spectrale</li>
+            <li><strong>Documentation :</strong> Support de cours R205 et R206</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Configuration ADALM-PLUTO -->
+      <section>
+        <h2> Configuration de l'ADALM-PLUTO</h2>
+
+        <h3> Paramètres principaux</h3>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Paramètre</th>
+              <th>Valeur</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fréquence centrale</td>
+              <td>700 MHz (initial)</td>
+              <td>Fréquence de démodulation, ajustable via curseur</td>
+            </tr>
+            <tr>
+              <td>Gain en dB</td>
+              <td>Variable</td>
+              <td>Amplification interne de la chaîne de réception</td>
+            </tr>
+            <tr>
+              <td>BaseBand sample rate</td>
+              <td>61 MHz</td>
+              <td>Fréquence d'échantillonnage des CAN internes</td>
+            </tr>
+            <tr>
+              <td>Span par défaut</td>
+              <td>±30,5 MHz</td>
+              <td>Largeur spectrale analysée autour de la fréquence centrale</td>
+            </tr>
+            <tr>
+              <td>Samples per frame</td>
+              <td>Configurable</td>
+              <td>Nombre d'échantillons par trame pour le calcul FFT</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3> Configuration du Spectrum Analyser</h3>
+        <ul>
+          <li><strong>Types de spectre :</strong> Power, Power Density, RMS</li>
+          <li><strong>Unités disponibles :</strong> Watts, dBW, dBm, dBm/Hz</li>
+          <li><strong>Adaptation automatique :</strong> Icône double flèche verticale</li>
+          <li><strong>Traces :</strong> Instantanée, Max Hold pour signaux fluctuants</li>
+          <li><strong>Zoom spectral :</strong> Réduction du span pour analyse détaillée</li>
+        </ul>
+      </section>
+
+      <!-- Protocole expérimental -->
+      <section>
+        <h2> Protocole expérimental</h2>
+
+        <h3>Phase 1 : Recherche et identification du signal</h3>
+        <div>
+          <h4> Recherche préliminaire</h4>
+          <ul>
+            <li><strong>Définition ISM :</strong> Recherche de la signification et réglementation</li>
+            <li><strong>Bandes européennes :</strong> Identification des 2 bandes ISM (200 MHz < f < 1 GHz)</li>
+            <li><strong>Réglementation :</strong> Consultation des sites gouvernementaux pour les limites légales</li>
+          </ul>
+
+          <h4> Détection du signal perturbateur</h4>
+          <ul>
+            <li><strong>Configuration initiale :</strong> Spectre en tension RMS, unité linéaire [Vrms]</li>
+            <li><strong>Balayage spectral :</strong> Exploration des bandes ISM < 1 GHz</li>
+            <li><strong>Identification :</strong> Repérage du signal de la télécommande de portail</li>
+            <li><strong>Centrage :</strong> Ajustement de la fréquence centrale sur le signal</li>
+          </ul>
+        </div>
+
+        <h3>Phase 2 : Caractérisation spectrale</h3>
+        <div>
+          <h4> Optimisation de l'affichage</h4>
+          <ul>
+            <li><strong>Span optimal :</strong> Réduction à 200 kHz pour analyse fine</li>
+            <li><strong>Centrage précis :</strong> Ajustement Min/Max du curseur horizontal</li>
+            <li><strong>Stabilisation :</strong> Utilisation du "Max-hold Trace" si nécessaire</li>
+            <li><strong>Observation :</strong> Spectre symétrique composé de raies</li>
+          </ul>
+
+          <h4> Mesures avec marqueurs (Trace Options)</h4>
+          <ul>
+            <li><strong>Peak Finder :</strong> Placement du marqueur sur la raie principale</li>
+            <li><strong>Fréquence :</strong> Relevé de la fréquence exacte du pic</li>
+            <li><strong>Amplitude RMS :</strong> Mesure en [Vrms]</li>
+            <li><strong>Puissance :</strong> Conversion en affichage "Power"</li>
+            <li><strong>Power Density :</strong> Mesure de la densité spectrale</li>
+            <li><strong>RBW :</strong> Notation de la bande de résolution utilisée</li>
+          </ul>
+        </div>
+
+        <h3>Phase 3 : Mesures de canal (Channel Measurements)</h3>
+        <div>
+          <ul>
+            <li><strong>Channel Power :</strong> Puissance totale dans la bande définie</li>
+            <li><strong>OBW (Occupied Bandwidth) :</strong> Largeur de bande occupée</li>
+            <li><strong>Configuration span :</strong> Définition de la bande de mesure</li>
+            <li><strong>Pourcentage de puissance :</strong> Critère pour le calcul OBW</li>
+            <li><strong>Compensation du gain :</strong> Prise en compte du gain ADALM-PLUTO</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Calculs et conversions -->
+      <section>
+        <h2> Calculs et conversions théoriques</h2>
+
+        <h3> Formules de conversion (référence R205)</h3>
+        <div>
+          <h4> Relations entre grandeurs</h4>
+          <ul>
+            <li><strong>RMS → Power :</strong> P = V²rms / R_load (avec R_load = charge de référence)</li>
+            <li><strong>Power → Power Density :</strong> PSD = P / RBW (W/Hz)</li>
+            <li><strong>Conversions logarithmiques :</strong> Passage dB ↔ linéaire</li>
+            <li><strong>Unités :</strong> dBm, dBW, dBm/Hz selon le contexte</li>
+          </ul>
+
+          <h4> Compensation du gain</h4>
+          <ul>
+            <li><strong>Gain ADALM-PLUTO :</strong> Amplification interne à déduire</li>
+            <li><strong>Puissance réelle :</strong> P_antenne = P_mesurée - Gain_dB</li>
+            <li><strong>Vérification :</strong> Test avec gain = 0 dB (risque de noyage dans le bruit)</li>
+            <li><strong>Channel Power :</strong> Calcul tenant compte de la DSP et de l'OBW</li>
+          </ul>
+        </div>
+
+        <h3> Objectifs de calcul</h3>
+        <ul>
+          <li>Retrouver par le calcul les valeurs affichées par Matlab</li>
+          <li>Valider la cohérence entre RMS, Power et Power Density</li>
+          <li>Vérifier l'impact du gain sur les mesures de puissance</li>
+          <li>Calculer la puissance réelle captée par l'antenne</li>
+        </ul>
+      </section>
+
+      <!-- Bandes ISM -->
+      <section>
+        <h2> Réglementation des bandes ISM</h2>
+
+        <h3> Définition ISM</h3>
+        <p>
+          <strong>ISM :</strong> Industrial, Scientific and Medical (Industriel, Scientifique et Médical)<br>
+          Bandes de fréquences réservées aux applications industrielles, scientifiques et médicales,
+          ainsi qu'aux objets connectés et à la domotique.
+        </p>
+
+        <h3>🇪🇺 Bandes ISM européennes (200 MHz - 1 GHz)</h3>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Bande</th>
+              <th>Fréquence centrale</th>
+              <th>Largeur</th>
+              <th>Applications typiques</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>433 MHz</td>
+              <td>433,92 MHz</td>
+              <td>433,05 - 434,79 MHz</td>
+              <td>Télécommandes, domotique, alarmes</td>
+            </tr>
+            <tr>
+              <td>868 MHz</td>
+              <td>868 MHz</td>
+              <td>863 - 870 MHz</td>
+              <td>LoRa, Sigfox, compteurs intelligents</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3> Contraintes réglementaires</h3>
+        <ul>
+          <li><strong>Puissance limitée :</strong> Restrictions sur la puissance d'émission</li>
+          <li><strong>Durée d'émission :</strong> Cycle utile maximum autorisé</li>
+          <li><strong>Largeur de bande :</strong> Respect des gabarits spectraux</li>
+          <li><strong>Coexistence :</strong> Tolérance aux interférences mutuelles</li>
+        </ul>
+      </section>
+
+      <!-- Compétences développées -->
+      <section>
+        <h2> Compétences développées</h2>
+
+        <h3> Radiofréquences et antennes</h3>
+        <ul>
+          <li>Utilisation d'un récepteur SDR (Software Defined Radio)</li>
+          <li>Exploration pratique du spectre électromagnétique</li>
+          <li>Identification de signaux dans les bandes ISM</li>
+          <li>Compréhension des interférences radio</li>
+        </ul>
+
+        <h3> Analyse spectrale</h3>
+        <ul>
+          <li>Mesures de densité spectrale de puissance (DSP)</li>
+          <li>Calcul de la bande occupée (OBW)</li>
+          <li>Mesures de puissance de canal (Channel Power)</li>
+          <li>Utilisation d'un analyseur de spectre logiciel</li>
+        </ul>
+
+        <h3> Calculs et conversions</h3>
+        <ul>
+          <li>Conversions RMS ↔ Power ↔ Power Density</li>
+          <li>Gestion des unités logarithmiques (dBm, dBW, dBm/Hz)</li>
+          <li>Compensation des gains de chaîne RF</li>
+          <li>Application des formules vues en cours R205</li>
+        </ul>
+
+        <h3>Réglementation</h3>
+        <ul>
+          <li>Connaissance des bandes ISM européennes</li>
+          <li>Recherche documentaire sur sites gouvernementaux</li>
+          <li>Compréhension des contraintes légales d'émission</li>
+          <li>Procédures de signalement d'interférences</li>
+        </ul>
+      </section>
+
+      <!-- Évaluation QCM -->
+      <section>
+        <h2> Évaluation - QCM</h2>
+
+        <h3> Modalités</h3>
+        <ul>
+          <li><strong>Durée :</strong> 30 minutes maximum</li>
+          <li><strong>Date :</strong> Mercredi 04 juin 2025</li>
+          <li><strong>Créneaux :</strong> TD1 (9h-10h), TD2 (8h-9h)</li>
+          <li><strong>Matériel autorisé :</strong> Calculatrice + fiche de synthèse A4 manuscrite</li>
+        </ul>
+
+        <h3> Contenu du QCM</h3>
+        <ul>
+          <li><strong>Analyse spectrale :</strong> Questions sur les mesures effectuées</li>
+          <li><strong>Calculs :</strong> Conversions entre RMS, Power, Power Density</li>
+          <li><strong>Bandes ISM :</strong> Réglementation et applications</li>
+          <li><strong>Concepts R104/R105/R205/R206 :</strong> Mobilisation des connaissances acquises</li>
+          <li><strong>Signaux XDSL/OFDM :</strong> Analyse de spectres similaires</li>
+        </ul>
+      </section>
+
+      <!-- Ce que je retiens -->
+      <section>
+        <h2> Ce que je retiens</h2>
+        <div>
+          <p>
+            Cette SAE m'a permis de découvrir concrètement l'analyse spectrale avec des outils professionnels.
+            L'utilisation de l'ADALM-PLUTO et de Matlab pour analyser un vrai signal radio était très formative.
+            J'ai particulièrement apprécié le côté pratique qui complète parfaitement les aspects théoriques
+            vus en cours.
+          </p>
+          <p>
+            La recherche de la réglementation ISM m'a sensibilisé aux aspects légaux des télécommunications,
+            souvent négligés mais pourtant essentiels dans le métier. Les calculs de conversion entre les
+            différentes grandeurs spectrales sont maintenant beaucoup plus clairs grâce à cette manipulation.
+          </p>
+          <p>
+            L'aspect "détective radio" pour identifier le signal perturbateur était motivant et proche
+            des situations réelles qu'un technicien télécoms peut rencontrer sur le terrain.
+          </p>
+        </div>
+      </section>
+
+      <!-- Difficultés rencontrées -->
+      <section>
+        <h2> Difficultés rencontrées</h2>
+
+        <div>
+          <h3> Prise en main ADALM-PLUTO</h3>
+          <p>
+            Difficultés sur les formules a utilisé en fonction
+          </p>
+        </div>
+
+        <div>
+          <h3>Paramétrage Spectrum Analyser</h3>
+          <p>
+            La différence entre le span de la FFT et le span des mesures de canal n'était pas évidente
+            au début. Les nombreux paramètres de l'analyseur de spectre Matlab demandent du temps
+            pour être maîtrisés.
+          </p>
+        </div>
+
+        <div>
+          <h3>Calculs de compensation</h3>
+          <p>
+            La prise en compte du gain de l'ADALM-PLUTO dans les calculs de puissance réelle était
+            source d'erreurs. Il faut bien distinguer la puissance mesurée de la puissance réellement
+            captée par l'antenne.
+          </p>
+        </div>
+      </section>
+
+      <!-- Axes d'amélioration -->
+      <section>
+        <h2> Axes d'amélioration</h2>
+
+        <div>
+          <h3>Approfondissement SDR</h3>
+          <p>
+            Explorer davantage les possibilités des récepteurs SDR : démodulation de signaux numériques,
+            analyse de modulations complexes, utilisation en émission pour des tests de compatibilité
+            électromagnétique.
+          </p>
+          <div>
+            <strong>Plan d'action :</strong> Projets personnels avec RTL-SDR et GNU Radio pour
+            approfondir le traitement de signal en temps réel.
+          </div>
+        </div>
+
+        <div>
+          <h3> Réglementation approfondie</h3>
+          <p>
+            Étudier plus en détail les aspects réglementaires : procédures de certification,
+            mesures d'homologation, contraintes de déploiement des objets connectés.
+          </p>
+          <div>
+            <strong>Plan d'action :</strong> Lecture des recommandations ARCEP et participation
+            à des formations sur la compatibilité électromagnétique.
+          </div>
+        </div>
+
+        <div>
+          <h3>Mesures avancées</h3>
+          <p>
+            Approfondir les techniques de mesure : analyse de modulation, mesures de phase,
+            caractérisation de l'EVM (Error Vector Magnitude), analyse de signaux OFDM complexes.
+          </p>
+          <div>
+            <strong>Plan d'action :</strong> Stage en laboratoire de mesures RF et formation
+            sur analyseurs de réseau vectoriels.
+          </div>
+        </div>
+      </section>
+
+      <!-- Auto-évaluation -->
+      <section>
+        <h2>⭐ Auto-évaluation</h2>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Compétence</th>
+              <th>Niveau</th>
+              <th>Justification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Utilisation ADALM-PLUTO</td>
+              <td>⭐⭐⭐⭐☆</td>
+              <td>Configuration maîtrisée, mesures précises obtenues</td>
+            </tr>
+            <tr>
+              <td>Analyse spectrale Matlab</td>
+              <td>⭐⭐⭐⭐☆</td>
+              <td>Bonne compréhension des paramètres et mesures</td>
+            </tr>
+            <tr>
+              <td>Calculs et conversions</td>
+              <td>⭐⭐⭐☆☆</td>
+              <td>Formules appliquées correctement, vérifications OK</td>
+            </tr>
+            <tr>
+              <td>Recherche réglementaire</td>
+              <td>⭐⭐⭐☆☆</td>
+              <td>Bandes ISM identifiées, sources officielles consultées</td>
+            </tr>
+            <tr>
+              <td>Identification signal</td>
+              <td>⭐⭐⭐⭐☆</td>
+              <td>Signal perturbateur localisé et caractérisé</td>
+            </tr>
+            <tr>
+              <td>Mesures Channel Power/OBW</td>
+              <td>⭐⭐⭐☆☆</td>
+              <td>Mesures réalisées avec compensation du gain</td>
+            </tr>
+            <tr>
+              <td>Autonomie et méthode</td>
+              <td>⭐⭐⭐⭐☆</td>
+              <td>Démarche logique, documentation consultée</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div>
+          <p><strong>Points forts :</strong></p>
+          <ul>
+            <li>Bonne prise en main des outils SDR et Matlab</li>
+            <li>Mesures spectrales précises et bien documentées</li>
+            <li>Approche méthodique de la caractérisation de signal</li>
+            <li>Intégration réussie des connaissances théoriques R205</li>
+          </ul>
+
+          <p><strong>Points à améliorer :</strong></p>
+          <ul>
+            <li>Approfondir les aspects réglementaires et normatifs</li>
+            <li>Développer l'analyse de signaux numériques complexes</li>
+            <li>Maîtriser davantage les calculs de link budget</li>
+            <li>Explorer les applications avancées du SDR</li>
+          </ul>
+          <p><strong>Bilan</strong></p>
+          <p> Sur le résultat du qcm j'ai obtenu 10/20. Grace a la correction j'ai réussi a comprendre mes erreurs,
+            comprendre les formules a utilisé dans tels cas et comprendre la différence entre un système et un signal
+          </p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <footer>
+    <div>
+      <p>&copy; 2025 Portfolio BUT RT - SAE24 Volet Télécommunication</p>
+      <p>Projet réalisé dans le cadre du BUT Réseaux & Télécommunications</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
