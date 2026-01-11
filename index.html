@@ -4,87 +4,2917 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio BUT RT - SCHER Florian</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>PORTFOLIO | SCHER Florian </title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;600&family=Ubuntu:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- 3. SYSTÈME KALI LINUX (PERSO) --- */
+        #os-linux {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            background: #0f1216 url('https://www.kali.org/images/kali-dragon-icon.svg') no-repeat center center;
+            background-size: 30%;
+            /* Le dragon en filigrane */
+            font-family: 'Ubuntu', sans-serif;
+            color: white;
+            position: relative;
+        }
+
+        /* Barre de tâches style XFCE (Kali) */
+        .kali-bar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 32px;
+            background: #1a1c1f;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #2a2d32;
+            z-index: 100;
+        }
+
+        .kali-menu-icon {
+            color: #2db8ff;
+            /* Bleu Kali */
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+
+        /* Fenêtre spécifique Kali */
+        #win-about {
+            width: 800px;
+            height: 550px;
+        }
+
+        .kali-identity-card {
+            display: flex;
+            gap: 20px;
+            background: #15171a;
+            padding: 20px;
+            border: 1px solid #2db8ff;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .kali-photo {
+            width: 120px;
+            height: 150px;
+            border: 1px solid #444;
+            background: #000;
+            object-fit: cover;
+        }
+
+        .kali-highlight {
+            color: #2db8ff;
+            font-weight: bold;
+        }
+
+        /* --- 0.1 ÉCRAN D'ALLUMAGE (SWITCH) --- */
+        #init-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 99999;
+            /* Au-dessus de tout */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .power-switch-container {
+            text-align: center;
+        }
+
+        .power-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #333;
+            color: #333;
+            background: transparent;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 0 auto 20px auto;
+        }
+
+        .power-btn:hover {
+            border-color: #666;
+            color: #666;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        /* État allumé */
+        .power-btn.on {
+            border-color: #00ff00;
+            color: #00ff00;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.6), inset 0 0 10px rgba(0, 255, 0, 0.2);
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .system-msg {
+            font-family: 'Share Tech Mono', monospace;
+            color: #444;
+            margin-top: 10px;
+            height: 20px;
+            /* Pour éviter le saut quand le texte apparait */
+            transition: color 0.3s;
+        }
+
+        .power-btn.on~.system-msg {
+            color: #00ff00;
+        }
+
+        /* Barre de chargement */
+        .loader-container {
+            width: 300px;
+            height: 4px;
+            background: #111;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            display: none;
+            /* Caché par défaut */
+        }
+
+        .loader-bar {
+            width: 0%;
+            height: 100%;
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+            transition: width 0.1s linear;
+        }
+
+        /* --- 0. VARIABLES DE THEME --- */
+        :root {
+            --bg-body: #000;
+            --c-primary: #fff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.5s;
+        }
+
+        /* --- 1. BOOTLOADER (GRUB STYLE) --- */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: #ccc;
+            font-family: 'Share Tech Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .grub-box {
+            border: 2px solid #555;
+            padding: 40px;
+            width: 600px;
+            background: #111;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .grub-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .grub-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            margin-bottom: 5px;
+            transition: 0.2s;
+        }
+
+        .grub-item:hover,
+        .grub-item.selected {
+            background: #fff;
+            color: #000;
+        }
+
+        .grub-desc {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #777;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+        }
+
+        /* --- 2. SYSTEME EDF (SCADA) --- */
+        #os-edf {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            background: #020408;
+            color: #e0f2ff;
+            font-family: 'Rajdhani', sans-serif;
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: 80px 1fr 30px;
+            /* Header plus haut pour logos */
+            background-image: linear-gradient(rgba(0, 26, 112, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 26, 112, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .edf-header {
+            grid-column: 1 / -1;
+            background: rgba(0, 26, 112, 0.4);
+            border-bottom: 2px solid #2a6df4;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-logos {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        }
+
+        .separator {
+            width: 1px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .edf-sidebar {
+            background: rgba(2, 6, 16, 0.95);
+            border-right: 1px solid #FE5800;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* BADGE EDF STYLE OFFICIEL */
+        .edf-badge {
+            background: #ffffff;
+            color: #001A70;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            border-left: 8px solid #001A70;
+            border-right: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .edf-badge::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Logo_EDF.svg/2560px-Logo_EDF.svg.png') no-repeat center/contain;
+            opacity: 0.2;
+        }
+
+        .badge-photo-frame {
+            width: 80px;
+            height: 80px;
+            border: 3px solid #FE5800;
+            margin-bottom: 10px;
+            overflow: hidden;
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        .badge-photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(0%);
+        }
+
+        .badge-name {
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            line-height: 1.2;
+            color: #001A70;
+        }
+
+        .badge-role {
+            font-size: 0.8rem;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .badge-id {
+            font-family: 'Share Tech Mono';
+            font-size: 0.75rem;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .badge-level {
+            background: #FE5800;
+            color: white;
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-top: 8px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .edf-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #8ba4b8;
+            padding: 15px;
+            cursor: pointer;
+            font-family: 'Rajdhani';
+            font-weight: bold;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .edf-btn:hover,
+        .edf-btn.active {
+            background: rgba(254, 88, 0, 0.1);
+            color: #FE5800;
+            border-color: #FE5800;
+        }
+
+        .edf-content {
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .edf-card {
+            background: rgba(2, 6, 16, 0.8);
+            border: 1px solid #2a6df4;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .edf-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            border-top: 2px solid #FE5800;
+            border-right: 2px solid #FE5800;
+        }
+
+        .edf-stat {
+            font-size: 2rem;
+            color: #FE5800;
+            font-weight: bold;
+        }
+
+        .edf-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .edf-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* LOGS EDF */
+        .log-window {
+            background: #000;
+            border: 1px solid #333;
+            height: 150px;
+            padding: 10px;
+            font-family: 'Share Tech Mono';
+            font-size: 0.8rem;
+            color: #0f0;
+            overflow-y: hidden;
+            position: relative;
+        }
+
+        .log-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .log-entry {
+            margin-bottom: 2px;
+        }
+
+        /* STATUS LIGHTS */
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #333;
+            padding-bottom: 5px;
+        }
+
+        .light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #333;
+            box-shadow: 0 0 5px #000;
+        }
+
+        .light.ok {
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .light.warn {
+            background: #ffcc00;
+            box-shadow: 0 0 10px #ffcc00;
+        }
+
+        .light.err {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        /* --- 3. SYSTEME LINUX (PERSO) --- */
+        #os-linux {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            background: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            font-family: 'Ubuntu', sans-serif;
+            color: white;
+            position: relative;
+        }
+
+        .linux-bar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            font-size: 0.9rem;
+        }
+
+        .linux-dock {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dock-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .dock-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .dock-icon:hover::after {
+            content: attr(data-title);
+            position: absolute;
+            left: 60px;
+            background: #333;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        /* WINDOWS (Fenêtres) */
+        .window {
+            position: absolute;
+            background: #2c2c2c;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid #444;
+            width: 700px;
+            height: 450px;
+            top: 100px;
+            left: 100px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: popIn 0.2s;
+        }
+
+        .window.active {
+            display: flex;
+            z-index: 10;
+        }
+
+        .win-header {
+            background: #3c3c3c;
+            padding: 5px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: grab;
+        }
+
+        .win-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .win-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .red {
+            background: #ff5f56;
+            cursor: pointer;
+        }
+
+        .yellow {
+            background: #ffbd2e;
+        }
+
+        .green {
+            background: #27c93f;
+        }
+
+        .win-body {
+            flex: 1;
+            padding: 0;
+            overflow-y: auto;
+            background: #1e1e1e;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* --- 4. SYSTEME RH (CORPORATE) --- */
+        #os-rh {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            overflow-y: auto;
+            background: #f4f4f4;
+            color: #333;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .rh-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 60px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+        }
+
+        .rh-header {
+            border-bottom: 4px solid #001A70;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .rh-name {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #001A70;
+        }
+
+        .rh-role {
+            font-size: 1.2rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .rh-section {
+            margin-bottom: 40px;
+        }
+
+        .rh-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #FE5800;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .rh-job {
+            margin-bottom: 20px;
+        }
+
+        .rh-job-head {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .rh-job-desc {
+            margin-top: 5px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .rh-tag {
+            display: inline-block;
+            background: #eee;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        /* UTILS */
+        .hidden {
+            display: none;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .terminal-text {
+            padding: 20px;
+            color: #0f0;
+        }
+
+        /* Modal Commun */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-box {
+            background: #050a14;
+            border: 2px solid #FE5800;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            color: white;
+            text-align: center;
+        }
+
+        /* NOUVEAU STYLE POUR LE LIEN CLIQUABLE */
+        .clickable-text {
+            cursor: pointer;
+            color: #FE5800;
+            text-decoration: underline;
+            transition: 0.3s;
+        }
+
+        .clickable-text:hover {
+            color: #fff;
+            text-shadow: 0 0 10px #FE5800;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Navigation -->
+    <div id="init-overlay">
+        <div class="power-switch-container">
+            <div class="power-btn" onclick="startSystem(this)">
+                <i class="fas fa-power-off"></i>
+            </div>
+            <div class="system-msg" id="sys-msg">SYSTÈME EN VEILLE</div>
 
-    <h2>Mon Portfolio BUT RT</h2>
-    <ul>
-        <li >
-            <a href="index.html"></a> Accueil
+            <div class="loader-container" id="loader-box">
+                <div class="loader-bar" id="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+    <div id="boot-screen">
+        <div class="grub-box">
+            <div class="grub-title">GNU GRUB version 2.06</div>
+            <div class="grub-item selected" onclick="bootOS('edf')" onmouseover="selectItem(this)">
+                * Alternance EDF BUT Réseau Télécom (Direction de Crise / FARN) Septembre 2025 - Aujourd'hui
+            </div>
+            <div class="grub-item" onclick="bootOS('linux')" onmouseover="selectItem(this)">
+                * RT LINUX (Environnement Technique & Projets)
+            </div>
+            <div class="grub-desc">
+                Utilisez la souris pour sélectionner une partition.<br>
+                ENERGY.OS : Supervision critique (TETRA, SAT, IRIDIUM).<br>
+                LINUX : Terminal, Projets, Labs.<br>
+            </div>
+        </div>
+    </div>
+
+    <div id="os-edf">
+        <header class="edf-header">
+            <div class="header-logos">
+                <img src="Image/EDF.png" alt="EDF" class="logo-img">
+                <div class="separator"></div>
+                <img src="Image/FARN.webp" alt="FARN" class="logo-img">
+                <div class="separator"></div>
+                <img src="Image/DC.jpg" alt="DC" class="logo-img">
+            </div>
+
+            <div style="font-family: 'Share Tech Mono'; color: #00ff00; display:flex; gap:15px; align-items: center;">
+                <span><i class="fas fa-shield-alt"></i> PCL ACTIVÉ</span>
+                <span style="background: rgba(0, 255, 0, 0.1); padding: 5px 10px; border: 1px solid #00ff00;"><i
+                        class="fas fa-clock"></i> <span id="edf-clock">12:00</span></span>
+            </div>
+        </header>
+        <nav class="edf-sidebar">
+
+            <div class="edf-badge">
+                <div class="badge-photo-frame">
+                    <img src="Image/pro.jpg" alt="Agent">
+                </div>
+                <div class="badge-name"> SCHER Florian</div>
+                <div class="badge-role">Alternant SI & Télécoms</div>
+                <div class="badge-level">HABILITATION FARN</div>
+            </div>
+
+            <div class="edf-btn active" onclick="switchEdfView('dashboard')"><i class="fas fa-chart-line"></i>
+                SUPERVISION</div>
+            <div class="edf-btn" onclick="switchEdfView('infra')"><i class="fas fa-sitemap"></i> ORGANISATION DC/FARN
+            </div>
+            <div class="edf-btn" onclick="switchEdfView('missions')"><i class="fas fa-tasks"></i> MES MISSIONS ALTERNANT
+            </div>
+            <div style="margin-top: auto;" class="edf-btn" onclick="location.reload()"><i class="fas fa-power-off"></i>
+                DÉCONNEXION</div>
+        </nav>
+        <main class="edf-content" id="edf-main">
+        </main>
+    </div>
+
+    
+    <div id="os-linux" style="display: none; height: 100vh; width: 100%; background: #0f1216 url('https://www.kali.org/images/kali-dragon-icon.svg') no-repeat center center; background-size: 30%; position: relative;">
+    
+    <div style="position: absolute; top: 0; width: 100%; height: 32px; background: #1a1c1f; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 0.85rem; border-bottom: 1px solid #2a2d32; z-index: 100; font-family: 'Ubuntu';">
+        <div><i class="fas fa-dragon" style="color:#2db8ff; margin-right: 15px;"></i><span style="font-weight: bold; color: #fff;">Applications</span></div>
+        <span id="kali-clock-display" style="color: #e0e0e0; font-family: 'Share Tech Mono';"></span>
+        <div style="display: flex; gap: 15px; align-items: center;"><i class="fas fa-wifi"></i><i class="fas fa-power-off" style="cursor:pointer; color: #ff5555;" onclick="location.reload()"></i></div>
+    </div>
+
+    <div class="linux-dock">
+        <div class="dock-icon" data-title="Audit Compétences" onclick="openWindow('about')"><i class="fas fa-terminal" style="color:#2db8ff;"></i></div>
+        <div class="dock-icon" data-title="Terminal" onclick="openWindow('term')"><i class="fas fa-code" style="color:#fff;"></i></div>
+    </div>
+
+    <div style="position: absolute; right: 20px; top: 60px; width: 280px; background: rgba(13, 15, 18, 0.95); border: 1px solid #2db8ff; border-radius: 4px; font-family: 'Share Tech Mono'; box-shadow: 0 0 20px rgba(0,0,0,0.5); z-index: 5; overflow: hidden;">
+        <div style="background: #1a1c1f; padding: 5px 10px; font-size: 0.75rem; color: #2db8ff; border-bottom: 1px solid #2db8ff;">
+            <i class="fas fa-envelope"></i> mail_client.exe
+        </div>
+        <div style="padding: 20px; text-align: center;">
+            <div style="color: #00ff00; font-size: 0.7rem; text-align: left; margin-bottom: 10px;">> CONNECT florian.scher.pro</div>
+            <i class="fas fa-at" style="font-size: 3rem; color: #fff; margin: 15px 0;"></i>
+            <div style="font-size: 0.8rem; color: #ccc; margin-bottom: 20px;">florian.scher.pro@gmail.com</div>
+            
+            <a href="mailto:florian.scher.pro@gmail.com?subject=Contact%20via%20Portfolio" 
+               style="display: block; border: 1px solid #2db8ff; color: #2db8ff; text-decoration: none; padding: 12px; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; transition: 0.3s; background: rgba(45, 184, 255, 0.1);"
+               onmouseover="this.style.background='#2db8ff'; this.style.color='#000';" 
+               onmouseout="this.style.background='rgba(45, 184, 255, 0.1)'; this.style.color='#2db8ff';">
+               INITIALIZE_MAIL_LINK
             </a>
+        </div>
+        <div style="background: #000; padding: 5px; font-size: 0.6rem; color: #444; text-align: center;">
+            ENCRYPTED_P2P_CONNECTION_ACTIVE
+        </div>
+    </div>
+
+    <div id="win-about" class="window active" style="left: 40px; top: 60px; width: 880px; height: 620px;">
+        <div class="win-header" style="background: #2a2d32;">
+            <span><i class="fas fa-user-shield"></i> profile_audit.sh — root@kali</span>
+            <div class="win-controls"><div class="win-dot red" onclick="closeWindow('about')"></div><div class="win-dot yellow"></div></div>
+        </div>
+        <div class="win-body" style="padding: 25px; background: #0d0f12; color: #e0e0e0; font-family: 'Inter'; overflow-y: auto;">
+            
+            <div style="display: flex; gap: 20px; margin-bottom: 25px; border-bottom: 1px solid #2a2d32; padding-bottom: 20px;">
+                <img src="Image/pro.jpg" style="width: 100px; height: 130px; border: 1px solid #2db8ff; object-fit: cover;">
+                <div style="flex: 1;">
+                    <h2 style="font-family:'Orbitron'; color:#2db8ff; margin:0; font-size: 1.4rem;">FLORIAN SCHER</h2>
+                    <p style="color:#00ff00; font-family:'Share Tech Mono'; margin: 5px 0; font-size: 0.8rem;">>_ Alternant EDF (DC/FARN) | BUT R&T Cyber</p>
+                    <p style="font-size: 0.85rem; color: #ccc; line-height: 1.4;">
+                        Spécialiste en résilience des infrastructures et sécurisation des flux critiques. Mon cursus BUT R&T m'apporte la maîtrise des protocoles standards, tandis que mon expérience chez EDF forge mon expertise sur les réseaux d'urgence.
+                    </p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                
+                <div style="background: #15171a; border: 1px solid #333; padding: 12px; border-radius: 4px;">
+                    <h3 style="color:#2db8ff; font-size: 0.8rem; border-bottom: 1px solid #2db8ff; padding-bottom: 5px; margin-top:0;">S1 : INITIALISATION RÉSEAUX</h3>
+                    <ul style="font-size: 0.75rem; line-height: 1.5; color:#aaa; padding-left: 15px;">
+                        <li><strong>Protocoles :</strong> Modèle OSI, IPv4/IPv6, ICMP.</li>
+                        <li><strong>Physique :</strong> Câblage VDI, Réflectométrie, RF.</li>
+                        <li><strong>Système :</strong> Linux CLI, Gestion des permissions.</li>
+                    </ul>
+                </div>
+
+                <div style="background: #15171a; border: 1px solid #333; padding: 12px; border-radius: 4px;">
+                    <h3 style="color:#2db8ff; font-size: 0.8rem; border-bottom: 1px solid #2db8ff; padding-bottom: 5px; margin-top:0;">S2 : ROUTAGE & SERVICES</h3>
+                    <ul style="font-size: 0.75rem; line-height: 1.5; color:#aaa; padding-left: 15px;">
+                        <li><strong>Routage :</strong> OSPFv2, RIPv2, Routage statique.</li>
+                        <li><strong>Services :</strong> DNS (Bind9), DHCP, Apache2.</li>
+                        <li><strong>Com :</strong> ToIP (SIP), VoIP Codecs, QoS.</li>
+                    </ul>
+                </div>
+
+                <div style="background: #15171a; border: 1px solid #333; padding: 12px; border-radius: 4px;">
+                    <h3 style="color:#2db8ff; font-size: 0.8rem; border-bottom: 1px solid #2db8ff; padding-bottom: 5px; margin-top:0;">S3 : WAN & SÉCURITÉ</h3>
+                    <ul style="font-size: 0.75rem; line-height: 1.5; color:#aaa; padding-left: 15px;">
+                        <li><strong>WAN :</strong> BGP (eBGP/iBGP), NAT/PAT.</li>
+                        <li><strong>Sécu :</strong> VPN IPSec, Firewalling Netfilter/iptables.</li>
+                        <li><strong>Dev :</strong> Automatisation Python & Bash.</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(254, 88, 0, 0.05); border: 1px solid #FE5800; padding: 12px; border-radius: 4px;">
+                    <h3 style="color:#FE5800; font-size: 0.8rem; border-bottom: 1px solid #FE5800; padding-bottom: 5px; margin-top:0;">EXPERTISE EDF (FARN)</h3>
+                    <ul style="font-size: 0.75rem; line-height: 1.5; color:#aaa; padding-left: 15px;">
+                        <li><strong>Radio :</strong> TETRA (TMO/DMO), Propagation RF.</li>
+                        <li><strong>Sat :</strong> VSAT (Bande Ka), BGAN, Iridium.</li>
+                        <li><strong>Crypto :</strong> AES-256, Conteneurs VeraCrypt/EDS.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div>
+                    <div style="display:flex; justify-content:space-between; font-size: 0.65rem; margin-bottom:5px; color:#2db8ff;"><span>IP_NETWORKING_CAPACITY</span><span>88%</span></div>
+                    <div style="width:100%; height:8px; background:#000; border-radius:4px;"><div style="width:88%; height:100%; background:#2db8ff; box-shadow: 0 0 10px #2db8ff;"></div></div>
+                </div>
+                <div>
+                    <div style="display:flex; justify-content:space-between; font-size: 0.65rem; margin-bottom:5px; color:#FE5800;"><span>TACTICAL_COMS_READY</span><span>94%</span></div>
+                    <div style="width:100%; height:8px; background:#000; border-radius:4px;"><div style="width:94%; height:100%; background:#FE5800; box-shadow: 0 0 10px #FE5800;"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <script>
+        // --- SYSTÈME D'ALLUMAGE (SWITCH) ---
+        function startSystem(btn) {
+            if (btn.classList.contains('on')) return; // Déjà allumé
+
+            // 1. Allumage visuel du bouton
+            btn.classList.add('on');
+            document.getElementById('sys-msg').innerText = "INITIALISATION DU BIOS...";
+            document.getElementById('sys-msg').style.textShadow = "0 0 10px #00ff00";
+
+            // 2. Affichage de la barre de chargement
+            const loaderBox = document.getElementById('loader-box');
+            const loaderBar = document.getElementById('loader-bar');
+            loaderBox.style.display = 'block';
+
+            // 3. Simulation de chargement (1.5 secondes)
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    finishBoot();
+                } else {
+                    // Progression aléatoire pour faire plus "réel"
+                    width += Math.random() * 5;
+                    if (width > 100) width = 100;
+                    loaderBar.style.width = width + '%';
+                }
+            }, 30); // Vitesse du chargement
+        }
+
+        function finishBoot() {
+            document.getElementById('sys-msg').innerText = "SYSTÈME PRÊT.";
+
+            // Petit délai avant de retirer l'écran noir
+            setTimeout(() => {
+                const overlay = document.getElementById('init-overlay');
+                overlay.style.opacity = '0';
+
+                // Retirer du DOM après la transition CSS
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 500);
+            }, 400);
+        }
+        // --- BOOTLOADER ---
+        function selectItem(el) {
+            document.querySelectorAll('.grub-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function bootOS(os) {
+            document.getElementById('boot-screen').style.display = 'none';
+            if (os === 'edf') {
+                document.getElementById('os-edf').style.display = 'grid';
+                switchEdfView('dashboard');
+                startLogs(); // Lance les logs auto
+            }
+            else if (os === 'linux') document.getElementById('os-linux').style.display = 'block';
+            else if (os === 'rh') document.getElementById('os-rh').style.display = 'block';
+        }
+
+        // --- EDF LOGIC ---
+        function switchEdfView(view) {
+            const main = document.getElementById('edf-main');
+            document.querySelectorAll('.edf-btn').forEach(b => b.classList.remove('active'));
+            // Highlight button logic
+            const btns = document.querySelectorAll('.edf-btn');
+            if (view === 'dashboard') btns[0].classList.add('active');
+            if (view === 'infra') btns[1].classList.add('active');
+            if (view === 'missions') btns[2].classList.add('active');
+
+            if (view === 'dashboard') {
+                main.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:end; margin-bottom:20px; border-bottom: 2px solid #2a6df4; padding-bottom:10px;">
+                        <div>
+                            <h1 style="font-size:2rem; margin:0; color:#fff; font-family:'Orbitron';">SUPERVISION TACTIQUE H24</h1>
+                            <span style="color:#2a6df4; font-weight:bold;">LOCAL TECHNIQUE DE CRISE NATIONAL (LTCN)</span>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:0.8rem; color:#888;">ÉTAT DU SYSTÈME</div>
+                            <div style="color:#00ff00; font-weight:bold; border:1px solid #00ff00; padding:2px 8px; background:rgba(0,255,0,0.1);">SURVEILLANCE ACTIVE</div>
+                        </div>
+                    </div>
+
+                    <div class="edf-grid-3">
+                        <div class="edf-card">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                                <strong style="color:#fff;">RÉSEAU TETRA</strong>
+                                <span class="light ok"></span>
+                            </div>
+                            <div style="font-size:0.75rem; color:#888; margin-bottom:5px;">CHARGE RÉPÉTEURS</div>
+                            <div style="width:100%; height:8px; background:#111; border-radius:4px; overflow:hidden;">
+                                <div style="width:24%; height:100%; background:#00ff00; box-shadow:0 0 10px #00ff00;"></div>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:0.7rem;">
+                                <span>Flux: 12.4 kbps</span>
+                                <span>Canaux: 4/16</span>
+                            </div>
+                        </div>
+
+                        <div class="edf-card">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                                <strong style="color:#fff;">LIAISON VSAT</strong>
+                                <span class="light warn"></span>
+                            </div>
+                            <div style="font-size:0.75rem; color:#888; margin-bottom:5px;">SNR (SIGNAL/BRUIT)</div>
+                            <div style="width:100%; height:8px; background:#111; border-radius:4px; overflow:hidden;">
+                                <div style="width:65%; height:100%; background:#ffcc00; box-shadow:0 0 10px #ffcc00;"></div>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:0.7rem;">
+                                <span>Atténuation: -14dB</span>
+                                <span>Latence: 640ms</span>
+                            </div>
+                        </div>
+
+                        <div class="edf-card">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                                <strong style="color:#fff;">FLOTTE IRIDIUM</strong>
+                                <span class="light ok"></span>
+                            </div>
+                            <div style="font-size:0.75rem; color:#888; margin-bottom:5px;">UNITÉS ACTIVES</div>
+                            <div style="font-size:1.8rem; font-weight:bold; color:#2a6df4; font-family:'Share Tech Mono';">14 / 15</div>
+                            <div style="font-size:0.7rem; color:#555; margin-top:5px;">MAINTENANCE PRÉVUE: UNITÉ #09</div>
+                        </div>
+                    </div>
+
+                    <div class="edf-grid-2" style="margin-top:20px;">
+                        <div class="edf-card">
+                            <h3 style="color:#FE5800; font-size:0.9rem; margin-top:0; border-bottom:1px solid #333; padding-bottom:8px;">
+                                <i class="fas fa-server"></i> INFRASTRUCTURE SI TACTIQUE
+                            </h3>
+                            <div class="status-row">
+                                <span>Serveur Central Cap Ampère</span>
+                                <span style="color:#00ff00;">ONLINE</span>
+                            </div>
+                            <div class="status-row">
+                                <span>Passerelle IP/Radio (Remorques)</span>
+                                <span style="color:#00ff00;">STABLE</span>
+                            </div>
+                            <div class="status-row">
+                                <span>Base de données TOTR</span>
+                                <span style="color:#ffcc00;">SYNC...</span>
+                            </div>
+                            <div class="status-row" style="border:none;">
+                                <span>Chiffrement AES-256</span>
+                                <span style="color:#00ff00;">ACTIF</span>
+                            </div>
+                        </div>
+
+                        <div class="edf-card" style="background:rgba(254, 88, 0, 0.05);">
+                            <h3 style="color:#fff; font-size:0.9rem; margin-top:0; border-bottom:1px solid #FE5800; padding-bottom:8px;">
+                                <i class="fas fa-users-cog"></i> DISPONIBILITÉ DE LA FORCE
+                            </h3>
+                            <div style="display:flex; gap:15px; align-items:center; margin-top:10px;">
+                                <div style="flex:1; text-align:center; border-right:1px solid #333;">
+                                    <div style="font-size:0.7rem; color:#888;">SR EN ASTREINTE</div>
+                                    <div style="font-weight:bold; color:#FE5800;">PALUEL</div>
+                                </div>
+                                <div style="flex:1; text-align:center;">
+                                    <div style="font-size:0.7rem; color:#888;">DÉLAI DE PROJECTION</div>
+                                    <div style="font-weight:bold; color:#fff;"> < 1 HEURE</div>
+                                </div>
+                            </div>
+                            <div style="margin-top:15px; background:#111; padding:8px; font-size:0.75rem; border-radius:4px;">
+                                <i class="fas fa-info-circle" style="color:#2a6df4;"></i> 
+                                <span style="color:#ccc;">Exercice national prévu en Semaine 08 (Zone Sud).</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="edf-card" style="margin-top:20px; border-top: 2px solid #FE5800;">
+                        <h3 style="color:#FE5800; margin-bottom:10px; font-family:'Orbitron'; font-size:1rem;">
+                            <i class="fas fa-terminal"></i> CONSOLE DE SUPERVISION (LOGS SYSTÈME)
+                        </h3>
+                        <div class="log-window">
+                            <div class="log-content" id="live-logs">
+                                </div>
+                        </div>
+                    </div>`;
+
+            } else if (view === 'infra') {
+                main.innerHTML = `
+                    <h1 style="font-size:2rem; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
+                        ORGANISATION & HISTOIRE
+                    </h1>
+
+                    <div class="edf-card" style="border-top: 4px solid #001A70; margin-bottom: 30px;">
+                         
+
+                        <p style="color: #ccc; font-size: 0.95rem; line-height: 1.5;">
+                            Électricité de France (EDF) est le premier producteur et fournisseur d'électricité en France et en Europe. 
+                            Acteur majeur de la transition énergétique, le groupe garantit la souveraineté énergétique nationale grâce à un mix de production décarboné (Nucléaire & Renouvelable).
+                        </p>
+
+                        <div class="edf-grid-3" style="margin-top: 20px;">
+                            <div style="text-align: center; border: 1px solid rgba(255,255,255,0.1); padding: 15px; background: rgba(0, 26, 112, 0.2);">
+                                <i class="fas fa-globe-europe" style="color:#2a6df4; font-size:1.5rem; margin-bottom:5px;"></i>
+                                <div style="font-size: 1.8rem; font-weight: bold; color: #fff; font-family:'Rajdhani';">1er</div>
+                                <div style="font-size: 0.75rem; color: #888; font-weight:bold;">PRODUCTEUR MONDIAL</div>
+                            </div>
+                            <div style="text-align: center; border: 1px solid rgba(255,255,255,0.1); padding: 15px; background: rgba(0, 26, 112, 0.2);">
+                                <i class="fas fa-atom" style="color:#FE5800; font-size:1.5rem; margin-bottom:5px;"></i>
+                                <div style="font-size: 1.8rem; font-weight: bold; color: #fff; font-family:'Rajdhani';">56</div>
+                                <div style="font-size: 0.75rem; color: #888; font-weight:bold;">RÉACTEURS (FR)</div>
+                            </div>
+                            <div style="text-align: center; border: 1px solid rgba(255,255,255,0.1); padding: 15px; background: rgba(0, 26, 112, 0.2);">
+                                <i class="fas fa-users" style="color:#00ff00; font-size:1.5rem; margin-bottom:5px;"></i>
+                                <div style="font-size: 1.8rem; font-weight: bold; color: #fff; font-family:'Rajdhani';">171k</div>
+                                <div style="font-size: 0.75rem; color: #888; font-weight:bold;">COLLABORATEURS</div>
+                            </div>
+                        </div>
+                         <div style="margin-top:15px; text-align:right; font-size:0.75rem; color:#666;">
+                            *Chiffres clés consolidés (Source interne/publique 2024)
+                        </div>
+                    </div>
+                    <div class="edf-card" style="border-left: 4px solid #FE5800;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div>
+                                <h2 style="color:#fff; margin:0; font-size:1.5rem;">DIRECTION DE CRISE (DC)</h2>
+                                <span style="font-family:'Share Tech Mono'; color:#888; font-size:0.9rem;">CRÉATION: 01 JANVIER 2023 (PROJET JANUS)</span>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-size:2rem; color:#2a6df4;"><i class="fas fa-university"></i></div>
+                            </div>
+                        </div>
+                        <p style="color:#ccc; margin-top:15px; border-top:1px dashed #333; padding-top:10px; font-size:0.95rem; line-height:1.5;">
+                            Résultat de la fusion stratégique entre l'<strong>État-Major de la Force d'Action Rapide du Nucléaire (FARN)</strong> et la <strong>Branche Organisation Nationale de Crise</strong>.
+                            <br>Cette entité assure une intégration totale entre la gestion de crise DPN et le dispositif de crise du Groupe, pilotant la réponse opérationnelle depuis le <strong>Local Technique de Crise National (LTCN)</strong> jusqu'au terrain.
+                        </p>
+                    </div>
+
+                    <div class="edf-grid-3" style="margin-top:20px; margin-bottom:20px;">
+                         <div class="edf-card" style="background:#050a14; padding:15px;">
+                            <div style="color:#2a6df4; font-weight:bold; margin-bottom:5px; font-size:1.1rem;"><i class="fas fa-drafting-compass"></i> BIM</div>
+                            <div style="font-size:0.85rem; font-weight:bold; color:#fff;">INGÉNIERIE & MÉTHODES</div>
+                            <div style="font-size:0.75rem; color:#888; margin-top:2px;">Resp: Mme A. BONNIN</div>
+                            <ul style="font-size:0.75rem; color:#aaa; padding-left:15px; margin-top:8px; line-height:1.4;">
+                                <li>Référentiels Sûreté-Crise</li>
+                                <li>Guides Accidents Graves</li>
+                                <li>Centres Locaux de Crise</li>
+                            </ul>
+                         </div>
+
+                         <div class="edf-card" style="background:#050a14; padding:15px;">
+                            <div style="color:#fff; font-weight:bold; margin-bottom:5px; font-size:1.1rem;"><i class="fas fa-users-cog"></i> BPCO</div>
+                            <div style="font-size:0.85rem; font-weight:bold; color:#fff;">PRÉPA & COMPÉTENCES</div>
+                            <div style="font-size:0.75rem; color:#888; margin-top:2px;">Resp: M. L. MARTINIE</div>
+                            <ul style="font-size:0.75rem; color:#aaa; padding-left:15px; margin-top:8px; line-height:1.4;">
+                                <li>Exercices Nationaux</li>
+                                <li>Formation Équipiers</li>
+                                <li>Retour d'Expérience (REX)</li>
+                            </ul>
+                         </div>
+
+                         <div class="edf-card" style="background:rgba(254, 88, 0, 0.1); border:1px solid #FE5800; padding:15px;">
+                            <div style="color:#FE5800; font-weight:bold; margin-bottom:5px; font-size:1.1rem;"><i class="fas fa-tools"></i> BMT</div>
+                            <div style="font-size:0.85rem; font-weight:bold; color:#fff;">MOYENS TECHNIQUES</div>
+                            <div style="font-size:0.75rem; color:#888; margin-top:2px;">Resp: M. F. GARIGON</div>
+                            <ul style="font-size:0.75rem; color:#aaa; padding-left:15px; margin-top:8px; line-height:1.4;">
+                                <li>Logistique & Maintenance</li>
+                                <li>Télécoms & SI de Crise</li>
+                                <li>Méthodes d'Intervention</li>
+                            </ul>
+                         </div>
+                    </div>
+
+                    <div class="edf-card" style="margin-bottom:30px; padding:10px; display:flex; gap:20px; align-items:center; overflow-x:auto;">
+                         <span style="color:#666; font-size:0.8rem; white-space:nowrap;">DIRECTION :</span>
+                         <span style="font-size:0.85rem; white-space:nowrap;"><i class="fas fa-user-tie" style="color:#fff;"></i> O. LE ROUX (Directeur)</span>
+                         <span style="font-size:0.85rem; color:#aaa; white-space:nowrap;"><i class="fas fa-user-shield"></i> T. HUGONY (Ops)</span>
+                         <span style="font-size:0.85rem; color:#aaa; white-space:nowrap;"><i class="fas fa-lightbulb"></i> E. PHILIP (Tech)</span>
+                    </div>
+                    <div class="edf-card">
+                         <h3 style="color:#FE5800; border-bottom:1px solid #FE5800; padding-bottom:10px; margin-bottom:15px;">
+                            <i class="fas fa-fire-extinguisher"></i> LA FORCE (FARN)
+                        </h3>
+                        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
+                            <div>
+                                <p style="font-size:0.9rem; color:#ccc; line-height:1.6;">
+                                    <strong>Force d'Action Rapide du Nucléaire.</strong><br>
+                                    Créée suite à l'accident de Fukushima, la FARN est une unité d'élite unique au monde. Sa mission est de rétablir les fonctions vitales d'une centrale accidentée (Eau, Air, Électricité) en moins de 24h, en autonomie totale pendant 72h.
+                                </p>
+                                <div style="display:flex; gap:10px; margin-top:10px;">
+                                    <span style="background:#001A70; color:#fff; padding:5px 10px; border-radius:4px; font-size:0.8rem;"><i class="fas fa-tint"></i> EAU</span>
+                                    <span style="background:#001A70; color:#fff; padding:5px 10px; border-radius:4px; font-size:0.8rem;"><i class="fas fa-wind"></i> AIR</span>
+                                    <span style="background:#001A70; color:#fff; padding:5px 10px; border-radius:4px; font-size:0.8rem;"><i class="fas fa-bolt"></i> ÉLEC</span>
+                                </div>
+                            </div>
+                            <div style="background:#111; padding:15px; border-radius:4px; text-align:center; border:1px dashed #444;">
+                                <i class="fas fa-map-marker-alt" style="color:#FE5800; font-size:1.5rem; margin-bottom:10px;"></i>
+                                <div style="font-weight:bold; color:#fff; margin-bottom:5px;">4 SERVICES RÉGIONAUX</div>
+                                <div style="font-size:0.8rem; color:#888;">
+                                    Bugey - Civaux<br>Dampierre - Paluel
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="edf-card">
+                        <h3 style="color:#2a6df4; margin-bottom:20px;">HISTORIQUE OPÉRATIONNEL</h3>
+                        <div style="position:relative; padding-left:20px; border-left:2px solid #333; margin-left:10px;">
+                             
+                            <div style="margin-bottom:30px; position:relative;">
+                                <div style="position:absolute; left:-26px; top:0; width:10px; height:10px; background:#666; border-radius:50%; border:2px solid #000;"></div>
+                                <div style="font-family:'Share Tech Mono'; font-size:1.1rem; color:#fff; font-weight:bold;">2011 - CRÉATION</div>
+                                <div style="font-size:0.85rem; color:#888;">Post-Fukushima. Décision de créer une force d'intervention nationale capable de reprendre le contrôle d'un site isolé.</div>
+                            </div>
+
+                            <div style="margin-bottom:30px; position:relative;">
+                                <div style="position:absolute; left:-26px; top:0; width:10px; height:10px; background:#2a6df4; border-radius:50%; border:2px solid #000; box-shadow:0 0 5px #2a6df4;"></div>
+                                <div style="font-family:'Share Tech Mono'; font-size:1.1rem; color:#2a6df4; font-weight:bold;">2017 - IRMA (Antilles)</div>
+                                <div style="font-size:0.85rem; color:#ccc;">Projection aérienne tactique. Rétablissement des réseaux électriques de l'île de St-Martin dévastée. Mission de sécurité civile.</div>
+                            </div>
+
+                            <div style="margin-bottom:30px; position:relative;">
+                                <div style="position:absolute; left:-26px; top:0; width:10px; height:10px; background:#FE5800; border-radius:50%; border:2px solid #000; box-shadow:0 0 5px #FE5800;"></div>
+                                <div style="font-family:'Share Tech Mono'; font-size:1.1rem; color:#FE5800; font-weight:bold;">2020 - ALEX (Roya)</div>
+                                <div style="font-size:0.85rem; color:#ccc;">Vallée de la Roya coupée du monde. Héliportage lourd de Groupes Électrogènes pour alimenter les villages isolés par les coulées de boue.</div>
+                            </div>
+
+                            <div style="margin-bottom:0; position:relative;">
+                                <div style="position:absolute; left:-26px; top:0; width:10px; height:10px; background:#fff; border-radius:50%; border:2px solid #000; box-shadow:0 0 10px #fff;"></div>
+                                <div style="font-family:'Share Tech Mono'; font-size:1.1rem; color:#fff; font-weight:bold;">2024 - CHIDO (Mayotte)</div>
+                                <div style="font-size:0.85rem; color:#ccc;">Crise de l'eau potable + Cyclone. Déploiement d'usines de potabilisation mobiles et gestion de crise logistique.</div>
+                            </div>
+
+                        </div>
+                    </div>
+                     
+                    <div class="edf-grid-2" style="margin-bottom:20px;">
+                        <div class="edf-card">
+                            <h3 style="color:#fff; border-bottom:1px solid #2a6df4; padding-bottom:10px; margin-bottom:15px;">
+                                <i class="fas fa-building" style="color:#2a6df4;"></i> CAP AMPÈRE (ST-DENIS)
+                            </h3>
+                            <div style="margin-bottom:15px;">
+                                <strong style="color:#FE5800;">DIRECTION DE CRISE (DC)</strong>
+                                <p style="font-size:0.85rem; color:#ccc; margin-top:5px;">
+                                    Siège de la Force. Lieu de décision stratégique nationale.
+                                </p>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:4px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <strong style="color:#fff;">LTCN</strong>
+                                    <span style="font-size:0.7rem; background:#333; padding:2px 5px;">H24</span>
+                                </div>
+                                <div style="font-size:0.75rem; color:#aaa; margin-top:5px;">
+                                    Locaux Techniques de Crise Nationale. Salles de crise ultra-sécurisées d'où l'État-Major pilote les opérations.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="edf-card">
+                             <h3 style="color:#fff; border-bottom:1px solid #FE5800; padding-bottom:10px; margin-bottom:15px;">
+                                <i class="fas fa-warehouse" style="color:#FE5800;"></i> BASE NATIONALE ST-LEU
+                            </h3>
+                            <div style="margin-bottom:15px;">
+                                <strong style="color:#fff;">AGENCE LOGISTIQUE NATIONALE (ALN)</strong>
+                                <p style="font-size:0.85rem; color:#ccc; margin-top:5px;">
+                                    Gestionnaire du site de stockage. Garantit la disponibilité du matériel lourd.
+                                </p>
+                            </div>
+                            <div style="background:rgba(254, 88, 0, 0.1); padding:10px; border-radius:4px; border:1px dashed #FE5800;">
+                                <div style="font-size:0.8rem; color:#FE5800; font-weight:bold;"><i class="fas fa-cubes"></i> STOCKAGE STRATÉGIQUE</div>
+                                <div style="font-size:0.75rem; color:#ccc; margin-top:5px;">
+                                    Groupes Électrogènes, Pompes Haut Débit, Véhicules Lourds, Pièces de Rechange. Point de départ des colonnes logistiques.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     
+                    <div class="edf-card" style="margin-top: 20px;">
+                        <h3 style="color:#FE5800; border-bottom:1px solid #FE5800; padding-bottom:10px; margin-bottom:15px;">
+                            <i class="fas fa-bell"></i> MÉCANIQUE D'URGENCE (CINÉMATIQUE)
+                        </h3>
+
+                        <div style="display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: center; text-align: center; margin-bottom: 25px;">
+                             
+                            <div style="background: #1a0500; border: 1px solid #555; padding: 15px; border-radius: 6px;">
+                                <div style="color: #FE5800; font-weight: bold; font-size: 1.2rem;">1. PUI</div>
+                                <div style="font-size: 0.8rem; color: #fff;">PLAN D'URGENCE INTERNE</div>
+                                <div style="font-size: 0.7rem; color: #888; margin-top: 5px;">Déclenché par le Directeur du site (CNPE) en difficulté.</div>
+                            </div>
+
+                            <i class="fas fa-chevron-right" style="color: #555; font-size: 1.5rem;"></i>
+
+                            <div style="background: #001A70; border: 1px solid #2a6df4; padding: 15px; border-radius: 6px;">
+                                <div style="color: #fff; font-weight: bold; font-size: 1.2rem;">2. ENF</div>
+                                <div style="font-size: 0.8rem; color: #ccc;">ORG. NATIONALE DE CRISE</div>
+                                <div style="font-size: 0.7rem; color: #aaa; margin-top: 5px;">Activée par le Directeur DPN si la crise s'aggrave.</div>
+                            </div>
+
+                             <i class="fas fa-chevron-right" style="color: #555; font-size: 1.5rem;"></i>
+
+                            <div style="background: #FE5800; color: #fff; padding: 15px; border-radius: 6px; box-shadow: 0 0 10px rgba(254, 88, 0, 0.3);">
+                                <div style="font-weight: bold; font-size: 1.2rem;">3. FARN</div>
+                                <div style="font-size: 0.8rem;">MOBILISATION</div>
+                                <div style="font-size: 0.7rem; color: #ffe; margin-top: 5px;">Ordre de la DC. < 1h pour partir. < 12h/24h sur site.</div>
+                            </div>
+
+                        </div>
+
+                        <h4 style="color:#2a6df4; margin-bottom:10px; border-top:1px dashed #333; padding-top:10px;">
+                            LE DÉTACHEMENT DE RECONNAISSANCE (L'AVANT-GARDE)
+                        </h4>
+                        <p style="font-size:0.85rem; color:#ccc; margin-bottom:15px;">
+                            Premier convoi envoyé sur place pour préparer l'arrivée de la "Grosse Colonne". Composé de 3 binômes clés :
+                        </p>
+
+                        <div class="edf-grid-3">
+                            <div style="background:#111; padding:15px; border-left:3px solid #fff;">
+                                <div style="display:flex; justify-content:space-between;">
+                                    <strong style="color:#fff;">FARN C</strong>
+                                    <i class="fas fa-crown" style="color:#555;"></i>
+                                </div>
+                                <div style="font-size:0.75rem; color:#aaa; margin-top:5px; font-weight:bold;">COMMANDEMENT</div>
+                                <div style="font-size:0.75rem; color:#666; margin-top:5px;">
+                                    Chef de Colonne. Il s'interface immédiatement avec le PCL (Poste de Commandement Local) du site accidenté.
+                                </div>
+                            </div>
+                            <div style="background:#111; padding:15px; border-left:3px solid #2a6df4;">
+                                <div style="display:flex; justify-content:space-between;">
+                                    <strong style="color:#2a6df4;">FARN D</strong>
+                                    <i class="fas fa-stethoscope" style="color:#2a6df4;"></i>
+                                </div>
+                                <div style="font-size:0.75rem; color:#aaa; margin-top:5px; font-weight:bold;">DIAGNOSTIC</div>
+                                <div style="font-size:0.75rem; color:#666; margin-top:5px;">
+                                    Experts techniques. Ils évaluent l'état du réacteur et définissent les besoins (Eau/Air/Elec).
+                                </div>
+                            </div>
+                            <div style="background:#111; padding:15px; border-left:3px solid #FE5800;">
+                                <div style="display:flex; justify-content:space-between;">
+                                    <strong style="color:#FE5800;">FARN LPR</strong>
+                                    <i class="fas fa-satellite-dish" style="color:#FE5800;"></i>
+                                </div>
+                                <div style="font-size:0.75rem; color:#aaa; margin-top:5px; font-weight:bold;">LOG / PROTECTION / RECO</div>
+                                <div style="font-size:0.75rem; color:#666; margin-top:5px;">
+                                     Assure l'autonomie du convoi et établit les 1ères liaisons (Sat/Radio) pour sortir de l'isolement.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     
+                    <div class="edf-card" style="border: 1px solid #FE5800; background: linear-gradient(90deg, rgba(2,6,16,1) 0%, rgba(30,15,0,0.8) 100%);">
+    <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
+        <div style="background:#FE5800; color:#fff; padding:10px; border-radius:4px; font-size:1.5rem;">
+            <i class="fas fa-id-card-alt"></i>
+        </div>
+        <div>
+            <h3 style="color:#fff; margin:0; font-size:1.4rem;">POSTE : ALTERNANT TÉLÉCOMS & SI</h3>
+            <span style="font-family:'Share Tech Mono'; color:#FE5800;">AFFECTATION : BRANCHE MOYENS TECHNIQUES (BMT)</span>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:20px;">
+        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:4px; border-left: 2px solid #FE5800;">
+            <div style="color:#aaa; font-size:0.8rem; margin-bottom:5px; text-transform:uppercase;">Responsable Hiérarchique</div>
+            <div style="color:#fff; font-weight:bold; font-size:1.1rem; margin-bottom:2px;">
+                Mr GARIGON François
+            </div>
+            <div style="color:#FE5800; font-size:0.8rem; font-family:'Share Tech Mono';">
+                <div style="color:#FE5800; font-size:0.8rem; font-family:'Share Tech Mono'; margin-top:5px;">
+    <ul style="list-style:none; padding:0; margin:0; line-height:1.4;">
+        <li style="margin-bottom:4px;">
+            <i class="fas fa-user-tie" style="color:#fff; width:15px;"></i>
+            <strong>Manager de la BMT :</strong> Pilotage global des opérations Logistique, Télécoms & Méthodes.
         </li>
-        <li >
-            <a href="presentation.html">Présentation
-            </a>
+        <li style="margin-bottom:4px;">
+            <i class="fas fa-chart-pie" style="color:#fff; width:15px;"></i>
+            <strong>GESTIONNAIRE :</strong> Allocation du budgets et des ressources (Moyens & Humains).
         </li>
-        <li >
-            <a href="entreprise.html"> Entreprise
-            </a>
-        </li>
-        <li>
-            <a href="contact.html" class="nav-link" data-page="contact">
-                <i class="fas fa-envelope"></i> Contact
-            </a>
+        <li style="margin-bottom:4px;">
+            <i class="fas fa-compass" style="color:#fff; width:15px;"></i>
+            <strong>DÉCISIONNEL :</strong> Validation des objectifs stratégiques et garantie de la performance du service.
         </li>
     </ul>
-    </nav>
+</div>
+            </div>
+        </div>
 
-    <!-- Container principal -->
-    <div class="container">
-        <!-- Page Accueil -->
-        <section id="accueil" class="page active">
-            <div class="hero">
-                <div class="hero-content">
-                    <div class="profile-image">
-                        <img src="Images/data.png" alt="Photo de profil" id="profile-img">
+        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:4px; border-left: 2px solid #2a6df4;">
+            <div style="color:#aaa; font-size:0.8rem; margin-bottom:5px; text-transform:uppercase;">Tuteur Entreprise</div>
+            <div style="color:#fff; font-weight:bold; font-size:1.1rem; margin-bottom:2px;">
+                Mr GONCALVES DOS SANTOS Olivier 
+            </div>
+            <div style="color:#2a6df4; font-size:0.8rem; font-family:'Share Tech Mono';">
+                Expert technique et formateur au sein de la FARN, il assure le pilotage opérationnel des systèmes d'information tactiques et de transmission critiques de la FARN (TETRA, VSAT, DMR, TOTR, Iridium). Il garantit également le déploiement des remorques télécoms et apporte un appui stratégique au Local Technique de Crise National (LTCN) et il est en charge de la recherche de solutions pour optimiser l'efficacité des télécommunications du futur. En plus de cela, il possède des fonction opérationelle celle de FARN C. 
+
+             
+                </div>
+        </div>
+    </div>
+
+    <h4 style="color:#fff; border-bottom:1px dashed #555; padding-bottom:10px; margin-bottom:15px; margin-top:0;">
+        <i class="fas fa-tasks"></i> PÉRIMÈTRE & RESPONSABILITÉS
+    </h4>
+     
+    <p style="color:#ccc; font-size:0.95rem; line-height:1.6; margin-bottom:15px;">
+        Intégré au sein de la BMT, ma mission principale est le déploiement d'une maquette destiné à la FARN. Cette maquette a pour mission de répondre au besoin de la FARN qui est la transmission de flux tels que des images. 
+
+    </p>
+
+    <ul style="color:#ccc; font-size:0.9rem; line-height:1.6; list-style:none; padding-left:5px;">
+        <li style="margin-bottom:10px;">
+            <i class="fas fa-angle-right" style="color:#FE5800;"></i> 
+            <strong>Projets Techniques :</strong> Participation au déploiement de la maquette TOTR à travers la configuration et le maintien d'un parc de tablettes.
+        </li>
+         <li style="margin-bottom:10px;">
+            <i class="fas fa-angle-right" style="color:#FE5800;"></i> 
+            <strong>Projets Techniques :</strong> Assurer la transformation des besoins de la FARN en exigences techniques.
+        </li>
+         <li style="margin-bottom:10px;">
+            <i class="fas fa-angle-right" style="color:#FE5800;"></i> 
+            <strong>Projets Techniques :</strong> Adapter les exigences en respectant les contraintes budgétaires, technique (débits de transmission, matériels disponible) et humaine.
+        </li>
+        <li style="margin-bottom:10px;">
+            <i class="fas fa-angle-right" style="color:#FE5800;"></i> 
+            <strong>Support & Documentation :</strong> Rédaction d'un cahier des charges à la suite des test en exercice. Ce cahier des charge est la destination de la DIGIT dans le but d'un déploiement national assurer par cette entité. Grace à ce déploiement le parc de tablette sera intégrés a l'opérabilités de la FARN
+        </li>
+    </ul>
+
+    <div style="margin-top:20px; background:rgba(42, 109, 244, 0.1); padding:10px; border: 1px dashed #2a6df4; border-radius:4px;">
+        <strong style="color:#2a6df4; font-size:0.85rem;">ECOSYSTÈME & INTERACTIONS :</strong>
+        <p style="color:#ccc; font-size:0.85rem; margin:5px 0 0 0;">
+            Je travaille en interraction directe avec la BMT, les référents télécoms ainsi que les chef de colonnes des Services Régionaux (SR).
+        </p>
+    </div>
+</div>
+                    </div>`;
+            } else if (view === 'missions') {
+                main.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                        <h1 style="font-size:2rem; margin:0;">SUIVI DES MISSIONS & COMPÉTENCES</h1>
+                        <div style="font-family:'Share Tech Mono'; color:#FE5800; border:1px solid #FE5800; padding:5px 10px; cursor:pointer;">
+                            <i class="fas fa-folder-open"></i> DOSSIER_ALTERNANT.LOG
+                        </div>
                     </div>
-                    <h1 class="hero-title">Bienvenue sur mon Portfolio</h1>
-                    <h2 class="hero-subtitle">BUT Réseaux et Télécommunications</h2>
-                    <p class="hero-description">
-                        Étudiant passionné par les technologies réseau, l'infrastructure informatique
-                        et les télécommunications. Ce portfolio présente mon parcours, mes compétences
-                        et mes réalisations dans le cadre de ma formation BUT RT.
+
+                    <div class="edf-card" style="border-left: 4px solid #FE5800; font-family: 'Segoe UI', sans-serif; background-color: #1a1d23; padding: 20px; color: #ccc;">
+     
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid #444; padding-bottom:15px; margin-bottom:20px;">
+        <div>
+            <h2 style="color:#fff; margin:0; font-size:1.5rem; text-transform:uppercase; letter-spacing:1px;">MISSION 01 : DÉCOUVERTE DES MOYENS TÉLÉCOMS CRITIQUES</h2>
+            <div style="color:#FE5800; font-family:'Share Tech Mono', monospace; margin-top:5px; font-size:0.9rem;">PÉRIODE : SEPTEMBRE 2025 - Décembre 2025 2025</div>
+        </div>
+        <div style="font-size:3rem; color:rgba(255,255,255,0.1);"><i class="fas fa-satellite-dish"></i></div>
+    </div>
+
+    <h4 style="color:#2a6df4; margin-bottom:10px; border-bottom: 1px dashed #2a6df4; display:inline-block; padding-bottom:5px;"><i class="fas fa-crosshairs"></i> CONTEXTE ET OBJECTIFS</h4>
+    <p style="color:#ccc; font-size:0.9rem; line-height:1.6; margin-bottom:25px; text-align:justify;">
+        <strong style="color:#fff;">Contexte :</strong> La FARN intervient en zone pouvant être accidentée. Elle est en mesure de déployer une infrastructure Télécoms permettant d'effectuer les communications opérationnelles et de se relier au réseau de la FARN où CAP Ampère agit comme un routeur cœur de réseau.<br>
+        <strong style="color:#fff;">Architecture Cible :</strong> Comprendre le rôle des différents outils de communications que la FARN possède ainsi que son architecture globale.<br>
+        <strong style="color:#fff;">Objectif :</strong> Maîtriser le matériel télécoms de la FARN, comprendre les contraintes techniques des communications de crise.
+    </p>
+
+    <h4 style="color:#2a6df4; margin-bottom:10px; border-bottom: 1px dashed #2a6df4; display:inline-block; padding-bottom:5px;"><i class="fas fa-boxes"></i> TÂCHES RÉALISÉES</h4>
+    <ul style="color:#ccc; font-size:0.9rem; line-height:1.6; padding-left:20px; margin-bottom:30px;">
+        <li style="margin-bottom:10px;"><strong>Opérabilité du matériel Télécoms de la DC :</strong> Toutes les huit semaines, la RECO d'astreinte effectue l'opérabilité de ses moyens télécoms. Cela consiste à vérifier le bon fonctionnement des radios TETRA, des téléphones satellites et du BGAN.</li>
+        <li style="margin-bottom:10px;"><strong>Formation Poste de Commandement Mobile :</strong> Déploiement du poste de commandement mobile via son guide technique, explication de l'architecture réseau et application de la notice pour la connexion au satellite VSAT.</li>
+        <li><strong>Formations AKA FARN :</strong> Découverte des règles de communications radio (attente d'autorisation, alphabet international). Manipulations des outils pour lier théorie et pratique : déploiement de la remorque télécoms, communications TETRA, liaisons satellitaires IRIDIUM et connexion internet via BGAN (partie que j'ai encadrée sous la supervision de mon tuteur).</li>
+         <li style="margin-bottom:10px;"><strong>Formation Equipiers Télécoms de crise :</strong> Audit de pannes sur les remorques télécoms, réparation des pannes en fonction de leur complexité. Si trop complexe c'est la digit qui s'occupera de la panne.</li>
+    </ul>
+
+    <div class="edf-card" style="border-left: 4px solid #00ff00; background:rgba(255,255,255,0.02); padding:15px; margin-bottom:30px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid #444; padding-bottom:15px; margin-bottom:20px;">
+            <div>
+                <h2 style="color:#fff; margin:0; font-size:1.5rem;">MONTÉE EN COMPÉTENCES : CURSUS TÉLÉCOMS</h2>
+                <div style="color:#00ff00; font-family:'Share Tech Mono', monospace; margin-top:5px;">STATUT : HABILITATIONS VALIDÉES</div>
+            </div>
+            <div style="font-size:3rem; color:rgba(255,255,255,0.1);"><i class="fas fa-chalkboard-teacher"></i></div>
+        </div>
+
+        <div style="background:rgba(2, 6, 16, 0.6); border:1px dashed #2a6df4; padding:15px; margin-bottom:20px;">
+            <div style="background:rgba(2, 6, 16, 0.8); border:1px solid rgba(42, 109, 244, 0.3); padding:15px; margin-bottom:20px;">
+                <h4 style="color:#2a6df4; margin:0 0 15px 0; font-size:0.9rem; border-bottom:1px solid rgba(42, 109, 244, 0.3); padding-bottom:5px;">
+                    <i class="fas fa-project-diagram"></i> ARCHITECTURE TACTIQUE DÉPLOYÉE
+                </h4>
+                 
+                <div style="display:flex; align-items:flex-start; justify-content:space-between; text-align:center; font-size:0.75rem; gap:10px; margin-bottom:15px;">
+                     
+                    <div style="width:32%; background:rgba(255, 0, 0, 0.1); border:1px solid #555; padding:8px; border-radius:4px;">
+                        <div style="color:#FE5800; font-weight:bold; margin-bottom:5px;"><i class="fas fa-radiation"></i> SITE (CNPE)</div>
+                        <div style="background:#222; margin-bottom:5px; padding:5px; border-radius:3px; border:1px solid #00ff00;">
+                            <i class="fas fa-trailer" style="color:#00ff00;"></i> <strong>REMORQUES</strong><br>
+                            <span style="color:#aaa; font-size:0.65rem;">Relais TETRA Local</span>
+                        </div>
+                        <div style="text-align:left; padding-left:5px; color:#ccc; font-size:0.65rem; line-height:1.4;">
+                            • <strong>Colonnes :</strong> Mode Direct/Infra<br>
+                            • <strong>Chef Colonne :</strong> Canal dédié
+                        </div>
+                    </div>
+
+                    <div style="width:10%; display:flex; flex-direction:column; justify-content:center; align-items:center; height:120px; color:#aaa;">
+                        <i class="fas fa-long-arrow-alt-left"></i>
+                        <span style="font-weight:bold; color:#fff;">30km</span>
+                        <span style="font-size:0.6rem; line-height:1.2;">Liaison<br>Hertzienne</span>
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                    </div>
+
+                    <div style="width:25%; background:rgba(254, 88, 0, 0.1); border:1px solid #555; padding:8px; border-radius:4px;">
+                        <div style="color:#FE5800; font-weight:bold; margin-bottom:5px;"><i class="fas fa-campground"></i> BASE ARRIÈRE</div>
+                        <div style="background:#222; margin-bottom:5px; padding:5px; border-radius:3px;">
+                            <i class="fas fa-truck-monster" style="color:#FE5800;"></i> <strong>PC MOBILE</strong><br>
+                            <span style="color:#fff;">FARN C</span>
+                        </div>
+                        <div style="color:#aaa; font-size:0.65rem;">Concentrateur & Commandement</div>
+                    </div>
+
+                    <div style="width:10%; display:flex; flex-direction:column; justify-content:center; align-items:center; height:120px; color:#2a6df4;">
+                        <i class="fas fa-satellite" style="font-size:1.2rem;"></i>
+                        <span style="font-size:0.6rem; margin-top:2px; font-weight:bold;">VSAT</span>
+                        <i class="fas fa-long-arrow-alt-right" style="margin-top:5px;"></i>
+                    </div>
+
+                    <div style="width:20%; background:rgba(42, 109, 244, 0.1); border:1px solid #555; padding:8px; border-radius:4px; display:flex; flex-direction:column; justify-content:center;">
+                        <div style="color:#00ff00; font-weight:bold;"><i class="fas fa-building"></i> NATIONAL</div>
+                        <div style="margin-top:5px; color:#fff; font-weight:bold;">CAP AMPÈRE</div>
+                        <div style="color:#aaa; font-size:0.65rem;">Cœur de Réseau</div>
+                    </div>
+                </div>
+
+                <div style="background:#111; padding:10px; border-left:3px solid #FE5800; font-size:0.8rem;">
+                    <strong style="color:#FE5800;">LOGIQUE DE COM. (PLAN DE FRÉQUENCE) :</strong>
+                    <ul style="margin:5px 0 0 0; padding-left:20px; color:#ccc; line-height:1.5;">
+                        <li><strong>Interconnexion (30km) :</strong> Les <em>Remorques</em> sur site assurent le relais vers le PC Mobile (Base arrière) où se trouve le <strong>FARN C</strong>.</li>
+                        <li><strong>Colonnes (Agents) :</strong> Chaque colonne possède son propre canal (ACL) pour ne pas saturer la boucle.</li>
+                        <li><strong>Commandement :</strong> Le <em>Chef de Colonne</em> dispose de canaux spécifiques :
+                            <br>1. Canal pour parler au <strong>FARN C</strong>.
+                            <br>2. Canal de <strong>Repos</strong>.
+                        </li>
+                        <li><strong>Modes d'exploitation :</strong> Alternance entre Mode <em>Infra</em> (via Remorque) et Mode <em>Direct</em> (DMO - Talkie à Talkie).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="edf-card" style="border-top: 1px solid #333; margin-top:20px; background:rgba(255, 255, 255, 0.02); padding-top:15px;">
+                <h3 style="color:#fff; margin:0 0 20px 0; border-bottom:1px dashed #555; padding-bottom:10px;">
+                    <i class="fas fa-search-plus" style="color:#FE5800;"></i> ZOOM SUR LES MOYENS DE PROJECTION
+                </h3>
+
+                <div class="edf-grid-2">
+                    <div class="edf-grid-2">
+                        <div>
+                            <h4 style="color:#FE5800; margin-bottom:15px; font-size:0.9rem;">
+                                <i class="fas fa-truck-pickup"></i> FLOTTE & VÉHICULES
+                            </h4>
+
+                            <div style="background:#111; border-left:3px solid #FE5800; padding:10px; margin-bottom:15px;">
+                                <strong style="color:#fff; font-size:0.9rem;">1. LE PC MOBILE (PCC)</strong>
+                                <div style="font-size:0.75rem; color:#aaa; margin-bottom:5px;">Poste de Commandement - Base Arrière</div>
+                                <div class="edf-card" style="margin:5px 0; padding:0; overflow:hidden; cursor:pointer; height:120px; border:1px solid #FE5800;" onclick="openModal('', true, 'Image/pc_mob_ext.jpg')">
+                                    <img src="Image/pc_mob_ext.jpg" style="width:100%; height:100%; object-fit:cover; opacity:0.8; transition:0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">
+                                </div>
+                                <p style="color:#ccc; font-size:0.8rem; line-height:1.4; margin:5px 0 0 0;">
+                                    Centre névralgique du <strong>FARN C</strong>. Assure le routage CNPE <-> National via double liaison VSAT.
+                                </p>
+                            </div>
+
+                            <div style="background:#111; border-left:3px solid #00ff00; padding:10px; margin-bottom:15px;">
+                                <strong style="color:#fff; font-size:0.9rem;">2. LA REMORQUE TÉLÉCOM</strong>
+                                <div style="font-size:0.75rem; color:#aaa; margin-bottom:5px;">Multiplexeur Tactique - Zone CNPE</div>
+                                <div class="edf-card" style="margin:5px 0; padding:0; overflow:hidden; cursor:pointer; height:120px; border:1px solid #00ff00;" onclick="openModal('', true, 'Image/remorque.jpg')">
+                                    <img src="Image/remorque.jpg" style="width:100%; height:100%; object-fit:cover; opacity:0.8; transition:0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">
+                                </div>
+                                <ul style="margin:5px 0 0 0; padding-left:15px; font-size:0.75rem; color:#ddd;">
+                                    <li><strong>WIFI :</strong> Data locale.</li>
+                                    <li><strong>ToIP :</strong> Téléphonie filaire.</li>
+                                    <li><strong>TETRA :</strong> Relais radio local.</li>
+                                </ul>
+                            </div>
+
+                            <div style="background:#111; border-left:3px solid #FFD700; padding:10px;">
+                                <strong style="color:#fff; font-size:0.9rem;">3. VL FARN (Véhicule Léger)</strong>
+                                <div style="font-size:0.75rem; color:#aaa; margin-bottom:5px;">Liaison Mobile (COTM)</div>
+                                <div class="edf-card" style="margin:5px 0; padding:0; overflow:hidden; cursor:pointer; height:120px; border:1px solid #FFD700;" onclick="openModal('', true, 'Image/RECO.webp')">
+                                    <img src="Image/RECO.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.8; transition:0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">
+                                </div>
+                                <div style="margin-top:5px; font-size:0.75rem; color:#FFD700;">
+                                    <i class="fas fa-wifi"></i> Terminal BGAN de Toit.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 style="color:#2a6df4; margin-bottom:15px; font-size:0.9rem;">
+                            <i class="fas fa-server"></i> SPÉCIFICATIONS TECHNIQUES & RÔLES
+                        </h4>
+                         
+                        <div style="display:grid; grid-template-columns: 1fr; gap:15px;">
+                             
+                            <div style="background:rgba(0, 255, 0, 0.05); border:1px solid #00ff00; padding:10px; border-radius:4px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,255,0,0.3); padding-bottom:5px; margin-bottom:5px;">
+                                    <strong style="color:#00ff00;">1. TETRA (Radio)</strong>
+                                    <span style="font-size:0.65rem; background:#00ff00; color:#000; padding:2px 6px; border-radius:2px; font-weight:bold;">TACTIQUE</span>
+                                </div>
+                                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:0.75rem;">
+                                    <div style="color:#ccc;">
+                                        <i class="fas fa-cogs" style="color:#00ff00;"></i> <strong>FONCTIONNEMENT :</strong><br>
+                                        Radio numérique à partage de ressources (Trunking). Utilise le TDMA (4 communications sur 1 fréquence).
+                                        <br><em>Modes :</em> TMO (via Relais Remorque) ou DMO (Direct Talkie-Talkie).
+                                    </div>
+                                    <div style="color:#ccc; border-left:1px solid #333; padding-left:10px;">
+                                        <i class="fas fa-shield-alt" style="color:#00ff00;"></i> <strong>RÔLE FARN :</strong><br>
+                                        Assurer la phonie de groupe sécurisée sur le chantier. Indispensable car les murs du CNPE (Béton armé) bloquent les ondes : le relais Remorque permet de "passer" les obstacles.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="background:rgba(42, 109, 244, 0.1); border:1px solid #2a6df4; padding:10px; border-radius:4px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(42,109,244,0.3); padding-bottom:5px; margin-bottom:5px;">
+                                    <strong style="color:#2a6df4;">2. VSAT (Satellite KA)</strong>
+                                    <span style="font-size:0.65rem; background:#2a6df4; color:#fff; padding:2px 6px; border-radius:2px; font-weight:bold;">STRATÉGIQUE</span>
+                                </div>
+                                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:0.75rem;">
+                                    <div style="color:#ccc;">
+                                        <i class="fas fa-cogs" style="color:#2a6df4;"></i> <strong>FONCTIONNEMENT :</strong><br>
+                                        Liaison vers satellite Géostationnaire (36000km). Bande KA (Hautes fréquences).
+                                        <br><em>Pointage :</em> Automatique précis requis. Sensible à la météo (pluie).
+                                    </div>
+                                    <div style="color:#ccc; border-left:1px solid #333; padding-left:10px;">
+                                        <i class="fas fa-shield-alt" style="color:#2a6df4;"></i> <strong>RÔLE FARN :</strong><br>
+                                        Le "Tuyau Principal". C'est le seul moyen de faire passer le gros volume de Data (Intranet, Visio, Mails) vers Cap Ampère.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="background:rgba(255, 255, 255, 0.05); border:1px solid #aaa; padding:10px; border-radius:4px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #555; padding-bottom:5px; margin-bottom:5px;">
+                                    <strong style="color:#fff;">3. IRIDIUM (Sat Portatif)</strong>
+                                    <span style="font-size:0.65rem; background:#aaa; color:#000; padding:2px 6px; border-radius:2px; font-weight:bold;">SECOURS</span>
+                                </div>
+                                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:0.75rem;">
+                                    <div style="color:#ccc;">
+                                        <i class="fas fa-cogs" style="color:#fff;"></i> <strong>FONCTIONNEMENT :</strong><br>
+                                        Constellation de satellites défilants (LEO - Basse altitude). Maillage global.
+                                        <br><em>Avantage :</em> Pas de pointage, fonctionne partout, antenne omnidirectionnelle.
+                                    </div>
+                                    <div style="color:#ccc; border-left:1px solid #333; padding-left:10px;">
+                                        <i class="fas fa-shield-alt" style="color:#fff;"></i> <strong>RÔLE FARN :</strong><br>
+                                        L'ultime secours. Quand le VSAT est HS et les relais TETRA détruits, c'est le seul moyen de signaler sa présence au National.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="background:rgba(255, 215, 0, 0.05); border:1px solid #FFD700; padding:10px; border-radius:4px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255, 215, 0, 0.3); padding-bottom:5px; margin-bottom:5px;">
+                                    <strong style="color:#FFD700;">4. BGAN (L-Band)</strong>
+                                    <span style="font-size:0.65rem; background:#FFD700; color:#000; padding:2px 6px; border-radius:2px; font-weight:bold;">MOBILE</span>
+                                </div>
+                                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:0.75rem;">
+                                    <div style="color:#ccc;">
+                                        <i class="fas fa-cogs" style="color:#FFD700;"></i> <strong>FONCTIONNEMENT :</strong><br>
+                                        Satellite Géostationnaire (Inmarsat). Bande L (Fréquence plus basse, pénètre mieux).
+                                        <br><em>Technique :</em> Émission ~3W. Le faisceau large facilite le pointage mobile.
+                                    </div>
+                                    <div style="color:#ccc; border-left:1px solid #333; padding-left:10px;">
+                                        <i class="fas fa-shield-alt" style="color:#FFD700;"></i> <strong>RÔLE FARN :</strong><br>
+                                        Assurer la Data en mouvement (VL) ou en déploiement rapide.
+                                        <br><em style="color:#aaa;">Défi :</em> Faible puissance vs Bruit électromagnétique du CNPE = SNR critique.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     
+    <div class="edf-grid-2" style="display:flex; gap:20px;">
+        <div style="flex:1;">
+            <h4 style="color:#00ff00; margin-bottom:10px; border-bottom:1px dashed #00ff00; display:inline-block; padding-bottom:5px;"><i class="fas fa-book"></i> MODULES SUIVIS</h4>
+             
+            <div style="margin-bottom:20px; border-left:2px solid #555; padding-left:15px;">
+                <strong style="color:#fff; font-size:1rem;">1. AKA FARN (Découverte des moyens de transmission)</strong>
+                <p style="color:#ccc; font-size:0.85rem; margin-top:5px;"><strong>Résultats Obtenus :</strong> </p>
+                <ul style="color:#aaa; font-size:0.8rem; line-height:1.4;">
+                    <li>Effectuer une communication respectant les standards internationaux</li>
+                    <li>Effectuer une communication téléphonique via satellite</li>
+                    <li>Déployer une communication satellitaire avec le BGAN</li>
+                    <li>Déployer une remorque télécom</li>
+                </ul>
+            </div>
+             
+            <div style="margin-bottom:20px; border-left:2px solid #00ff00; padding-left:15px; background:rgba(0, 255, 0, 0.05); padding:10px;">
+                <strong style="color:#00ff00; font-size:1rem;">2. FKTL (Équipier Télécom de Crise)</strong>
+                <div style="font-size:0.75rem; background:#00ff00; color:#000; display:inline-block; padding:2px 5px; font-weight:bold; margin-bottom:5px; margin-left:5px; border-radius:2px;">ORIENTÉ DÉPANNAGE</div>
+                <p style="color:#ccc; font-size:0.85rem; margin-top:5px;">
+                    <strong>Cœur du sujet : La Remorque Télécom.</strong> Formation diagnostic et résolution de pannes en conditions dégradées.
+                </p>
+                <ul style="color:#fff; font-size:0.8rem; line-height:1.4;">
+                    <li><i class="fas fa-wrench" style="color:#FE5800;"></i> Dépanner la remorque télécoms</li>
+                    <li><i class="fas fa-wrench" style="color:#FE5800;"></i> Réaliser un audit de panne pour la DIGIT (responsable du matériel télécom)</li>
+                    <li>Cartographie de la propagation des ondes radio</li>
+                    <li>Découverte du VSAT</li>
+                    <li>Découverte de l'infrastructure informatique de la FARN</li>
+                </ul>
+            </div>
+            <div style="margin-bottom:20px; border-left:2px solid #00ff00; padding-left:15px; background:rgba(0, 255, 0, 0.05); padding:10px;">
+                <strong style="color:#00ff00; font-size:1rem;">3. Formation déploiement du poste de commandement mobile</strong>
+                <div style="font-size:0.75rem; background:#00ff00; color:#000; display:inline-block; padding:2px 5px; font-weight:bold; margin-bottom:5px; margin-left:5px; border-radius:2px;">ORIENTÉ DÉPANNAGE</div>
+                <p style="color:#ccc; font-size:0.85rem; margin-top:5px;">
+                    <strong>Cœur du sujet : Le PC Mobile.</strong> Déploiement du PC. 
+                </p>
+                <ul style="color:#fff; font-size:0.8rem; line-height:1.4;">
+                    <li><i class="fas fa-wrench" style="color:#FE5800;"></i> Déployer le poste de commandement mobile à l'aide de son guide de déploiement</li>
+                    <li><i class="fas fa-wrench" style="color:#FE5800;"></i> Effectuer la liasion satelitaire entre VSAT et la parabole satelitte du poste de commandement mobile</li>
+                    <li>Architecture réseaux du poste de commandement mobile : Chaque agent à son poste dédié</li>
+                    <li> Permutation des écrans lors des réunions : Permets de visualisé l'écran du pc qu'on souhaite sur les écrans de notre choix.</li>                </ul>
+            </div>
+        </div>
+
+        <div style="flex:1;">
+            <h4 style="color:#00ff00; margin-bottom:10px; border-bottom:1px dashed #00ff00; display:inline-block; padding-bottom:5px;"><i class="fas fa-microchip"></i> TECHNOLOGIES MAÎTRISÉES</h4>
+             
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:20px;">
+                <div style="background:#111; padding:10px; border:1px solid #333; text-align:center; border-radius:4px;">
+                    <i class="fas fa-broadcast-tower" style="color:#2a6df4; font-size:1.2rem; margin-bottom:5px;"></i>
+                    <div style="font-weight:bold; color:#fff; font-size:0.75rem;">TETRA</div>
+                    <div style="font-size:0.65rem; color:#666;">Radio Sécurisée</div>
+                </div>
+                <div style="background:#111; padding:10px; border:1px solid #333; text-align:center; border-radius:4px;">
+                    <i class="fas fa-satellite" style="color:#FE5800; font-size:1.2rem; margin-bottom:5px;"></i>
+                    <div style="font-weight:bold; color:#fff; font-size:0.75rem;">VSAT KA</div>
+                    <div style="font-size:0.65rem; color:#666;">Haut Débit Sat</div>
+                </div>
+                <div style="background:#111; padding:10px; border:1px solid #333; text-align:center; border-radius:4px;">
+                    <i class="fas fa-network-wired" style="color:#00ff00; font-size:1.2rem; margin-bottom:5px;"></i>
+                    <div style="font-weight:bold; color:#fff; font-size:0.75rem;">ANALOGIQUE</div>
+                    <div style="font-size:0.65rem; color:#666;">Cuivre/PABX</div>
+                </div>
+            </div>
+
+            <h4 style="color:#00ff00; margin-bottom:10px; border-top:1px dashed #333; padding-top:10px;"><i class="fas fa-camera"></i> MATÉRIEL EN SITUATION</h4>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+                <div class="edf-card" style="padding:0; overflow:hidden; cursor:pointer; height:100px; border:1px solid #00ff00;" onclick="openModal('', true, 'Image/tetra.png')">
+                    <img src="Image/tetra.png" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition:0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">
+                </div>
+                <div class="edf-card" style="padding:0; overflow:hidden; cursor:pointer; height:100px; border:1px solid #00ff00;" onclick="openModal('', true, 'Image/iridium.jpg')">
+                    <img src="Image/iridium.jpg" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition:0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8">
+                </div>
+            </div>
+
+            <h4 style="color:#2a6df4; margin-bottom:10px; border-top:1px dashed #333; padding-top:10px;"><i class="fas fa-graduation-cap"></i> COMPÉTENCES CRITIQUES</h4>
+            <div style="margin-bottom:15px;">
+                <span class="edf-btn active" style="padding:5px 10px; font-size:0.8rem; display:inline-block; margin-bottom:5px; background:rgba(42, 109, 244, 0.2); color:#2a6df4; border:1px solid #2a6df4; border-radius:3px;">
+                    RT1 – Administrer les réseaux et l’Internet
+                </span>
+                <ul style="font-size:0.8rem; color:#aaa; line-height:1.4; margin-top:0; padding-left:20px;">
+                    <li>Manipulation de matériel réseau (BGAN).</li>
+                    <li>Connexion satellite via BGAN.</li>
+                    <li>Étude approfondie de l'architecture réseau FARN.</li>
+                </ul>
+            </div>
+            <div style="margin-bottom:15px;">
+                <span class="edf-btn active" style="padding:5px 10px; font-size:0.8rem; display:inline-block; margin-bottom:5px; background:rgba(42, 109, 244, 0.2); color:#2a6df4; border:1px solid #2a6df4; border-radius:3px;">
+                    RT2 – Connecter les entreprises et les usagers
+                </span>
+                <ul style="font-size:0.8rem; color:#aaa; line-height:1.4; margin-top:0; padding-left:20px;">
+                    <li>Communication radio TETRA (Protocole).</li>
+                    <li>Réseaux satellitaires (VSAT, Iridium).</li>
+                    <li>Dispersion des ondes et liaisons hertziennes.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+   <div style="background:rgba(255,255,255,0.02); padding:20px; border-radius:4px; margin-top:20px; border:1px solid #333; border-left: 4px solid #FE5800;">
+    <h4 style="color:#FE5800; margin-top:0; border-bottom:1px solid #444; padding-bottom:10px; margin-bottom:15px;">
+        <i class="fas fa-brain"></i> ANALYSE RÉFLEXIVE & RETOUR D'EXPÉRIENCE
+    </h4>
+
+    <div style="display:grid; grid-template-columns: 1fr; gap:15px;">
+         
+        <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:4px;">
+            <strong style="color:#fff; display:block; margin-bottom:5px;">
+                <i class="fas fa-exclamation-triangle" style="color:#FE5800; margin-right:5px;"></i> 
+                L'importance des communications de la FARN 
+            </strong>
+            <p style="color:#aaa; font-size:0.85rem; margin:0; line-height:1.5;">
+                <strong>Constat :</strong> La FARN a un besoin permanent d'effectuer des communications radio entre les agents FARN, les chefs de colonne et le FARN C. Ces communications doivent etre opérationnelle en environemment dégradés. <br>
+                <strong>Analyse :</strong> Si les moyens Télécoms tombe, les missions de la FARN seront grandement impacté, les agents n'auront plus de moyens de communications, ces agents seront alors en danger. 
+        </div>
+
+        <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:4px;">
+            <strong style="color:#fff; display:block; margin-bottom:5px;">
+                <i class="fas fa-filter" style="color:#2a6df4; margin-right:5px;"></i> 
+                Ségrégation des Flux : Tactique vs Stratégique
+            </strong>
+            <p style="color:#aaa; font-size:0.85rem; margin:0; line-height:1.5;">
+                <strong>Constat :</strong> Dans la réalisation de ma maquette, j'ai besoin de faire passer du flux émis par des tablettes via les remorques télécoms pour ainsi communiqué des images prise sur le terrain pour aavoir un visuelle du site en base arrière et depuis CAP Ampère <br>
+                <strong>Analyse :</strong> J'ai assimilé le besoin permanent du flux radio ainsi que les contraintes techniques relatives au missions de la FARN. Le flux des tablettes ne doit pas impacter les communications radio. EN effet une communication radio peut etre un appel d'urgence d'un agent en danger tout comme pouvant être une simple discussion entre agents
+                 <strong> Solution à mettre en place :</strong> Déployer de la qualité of service pour privilégier lesd paquets radio qui sont essentielle quitte a perdre les paquets des tablettes qui pourront être transmis après le flux radio. 
+        </div>
+
+        <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:4px;">
+            <strong style="color:#fff; display:block; margin-bottom:5px;">
+                <i class="fas fa-cloud-showers-heavy" style="color:#00ff00; margin-right:5px;"></i> 
+                Théorie vs Réalité Physique
+            </strong>
+            <p style="color:#aaa; font-size:0.85rem; margin:0; line-height:1.5;">
+                <strong>Constat :</strong> En théorie la remorque télécoms se connecte automatiquement au satelites VSAT. Chaque site à une cartographgie qui permets au agents de la FARN de savoir où déployer la remorque télécoms.<br>
+                <strong>Analyse :</strong> La réalité du CNPE (béton armé, structures métalliques, météo) perturbe la propagation. J'ai appris que l'emplacement physique de la Remorque ou du VL (dégagement sud pour le satellite, hauteur pour le relais radio) est une compétence aussi technique que la configuration IP. De plus réussir à effectuer la communication au satelitte est essentielle.
+                <strong>Problème rencontré :</strong> Absence de redondance dans les communications. En effet si la remorque n'arrive pas a se connecter au satelitte ou qu'il y a une panne sur le réseau VSAT, ces toutes l'infrastructure réseau de la FARN qui n'est plus opérationelle. La FARN est dépendant de l'infrastructure de VSAT dans ses communications.
+
+            </p>
+        </div>
+
+    </div>
+</div>
+
+                                
+                                <div style="background:rgba(0,255,0,0.02); padding:20px; border-radius:4px; margin-top:20px; border:1px solid #333; border-left: 4px solid #00ff00; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+    <div>
+        <h4 style="color:#00ff00; margin:0 0 5px 0; font-size:1rem;">
+            <i class="fas fa-camera-retro"></i> PREUVES DE VALIDATION
+        </h4>
+        <div style="color:#aaa; font-size:0.8rem; line-height:1.4;">
+            Incluant : Mise en situation BGAN (Supervisée) & Documents de suivi.<br>
+            <span style="color:#666;">Dossier Complet</span>
+        </div>
+    </div>
+    
+    <button onclick="document.getElementById('modal-galerie-fktl').style.display='flex'" 
+            onmouseover="this.style.background='#00ff00'; this.style.color='#000'; this.style.boxShadow='0 0 15px rgba(0, 255, 0, 0.4)'" 
+            onmouseout="this.style.background='transparent'; this.style.color='#00ff00'; this.style.boxShadow='none'" 
+            style="
+                background: transparent;
+                border: 1px solid #00ff00;
+                color: #00ff00;
+                padding: 10px 20px;
+                font-family: 'Share Tech Mono', monospace;
+                font-size: 0.9rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                border-radius: 2px;
+                display:flex; align-items:center; gap:10px;
+            ">
+        <i class="fas fa-images"></i> OUVRIR LA GALERIE
+    </button>
+</div>
+
+                   <div class="edf-card" style="border-left: 4px solid #2a6df4; background-color: #1a1d23; padding: 20px; color: #ccc; margin-top: 30px; font-family: 'Roboto', sans-serif;">
+    
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid #444; padding-bottom:15px; margin-bottom:20px;">
+        <div>
+            <h2 style="color:#fff; margin:0; font-size:1.5rem; text-transform:uppercase; letter-spacing:1px;">MISSION 02 : IMMERSION INDUSTRIELLE & GESTION DE CRISE</h2>
+            <div style="color:#2a6df4; font-family:'Share Tech Mono', monospace; margin-top:5px; font-size:0.9rem;">
+                <span style="border:1px solid #2a6df4; padding:2px 5px;">SEPT 2025</span> <i class="fas fa-arrow-right" style="font-size:0.7rem;"></i> <span style="border:1px solid #2a6df4; padding:2px 5px;">DÉC 2025</span>
+            </div>
+        </div>
+        <div style="font-size:3rem; color:rgba(42, 109, 244, 0.1);"><i class="fas fa-industry"></i></div>
+    </div>
+
+    <h4 style="color:#FE5800; margin-bottom:10px; border-bottom: 1px dashed #FE5800; display:inline-block; padding-bottom:5px;"><i class="fas fa-crosshairs"></i> CONTEXTE ET ENJEUX</h4>
+    <p style="color:#ccc; font-size:0.9rem; line-height:1.6; margin-bottom:25px; text-align:justify;">
+        <strong style="color:#fff;">Contexte :</strong> Dans la réalisation de ma maquette, il est primordial que je comprennes les missions de la FARN. Pour ce faire il est primordial que je comprenne le fonctionnement d'une centrale nucléaire de production électriques notamment les réacteur à eau préssurisé. Pour ce faire j'ai fais des immersions au CNPE de Paluel et Dampierre<br>
+        <strong style="color:#fff;">Le défi :</strong> Appréhender la chaîne de commandement complexe entre le niveau National (Direction de Crise - DC) et le niveau Local (CNPE) pour garantir que les flux d'informations circulent sans interruption. Comprendre les missions de la FARN et ses contraintes<br>
+        <strong style="color:#fff;">Objectif :</strong> Maîtriser le fonctionnement d'un Réacteur à Eau Pressurisée (REP) pour anticiper les zones d'ombre radio et comprendre la sémantique de crise.
+    </p>
+
+    <h4 style="color:#FE5800; margin-bottom:10px; border-bottom: 1px dashed #FE5800; display:inline-block; padding-bottom:5px;"><i class="fas fa-boxes"></i> TÂCHES RÉALISÉES</h4>
+    <ul style="color:#ccc; font-size:0.9rem; line-height:1.6; padding-left:20px; margin-bottom:30px;">
+        <li style="margin-bottom:10px;"><strong>Découverte de l'organisation de crise (Projet JANUS) :</strong> Présentation des différents acteurs de la DC et de la chaine de commandement de la FARN</li>
+        <li style="margin-bottom:10px;"><strong>Formation Process Nucléaire (REP) :</strong> Apprentissage théorique du fonctionnement des centrales pour identifier les zones d'intervention FARN (Bâtiment Réacteur, plugs).</li>
+         <li style="margin-bottom:10px;"><strong> Immersion en CNPE :</strong> Découverte physique d'un CNPE, visite du circuit d'eau et de la salle des machines. Découverte des plugs de la FARN </li>
+         <li><strongDécouverte d'une salle des commandes via un simulateur:</strong> Immersion en situation simulée lors d'un exercice de Plan d'Urgence Interne (PUI)</li>
+         <li><strong> A organiser : Observation Exercice de Crise :</strong> Immersion en situation simulée pour voir comment la DC (Direction de Crise) pilote les équipes terrain et observés les missions FARN </li>                   
+         <li><strong> A organiser : Immersion dans une colonne FARN :</strong> Immersion dans le role d'agent FARN pour voir le fonctionnement d'une colonne sur une semaine </li>
+
+    </ul>
+
+   <div style="font-family:'Segoe UI', sans-serif; color:#e0e0e0; background-color:#181818; padding:25px; border-radius:10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+
+    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#1a1a1a; color:#ccc; padding:20px; border-radius:8px; max-width:1200px; margin:auto;">
+
+    <div style="border-bottom: 2px solid #333; padding-bottom:15px; margin-bottom:25px; display:flex; justify-content:space-between; align-items:end;">
+        <div>
+            <h2 style="color:#fff; margin:0; text-transform:uppercase; letter-spacing:1px;">
+                <i class="fas fa-network-wired" style="color:#FE5800;"></i> Organisation DC & FARN
+            </h2>
+            <span style="color:#888; font-size:0.8rem;">Missions détaillées - Septembre 2025</span>
+        </div>
+        <div style="text-align:right;">
+             <span style="background:#2a6df4; color:white; padding:2px 8px; border-radius:4px; font-size:0.7rem; margin-right:5px;">STRATÉGIE (DC)</span>
+             <span style="background:#FE5800; color:white; padding:2px 8px; border-radius:4px; font-size:0.7rem;">TACTIQUE (FARN)</span>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1.6fr 0.8fr; gap:30px;">
+
+        <div style="display:flex; flex-direction:column; gap:20px;">
+             
+            <div style="background:rgba(42, 109, 244, 0.08); border-left:5px solid #2a6df4; padding:15px; border-radius:6px;">
+                <h3 style="color:#fff; margin:0 0 10px 0; font-size:1.1rem; border-bottom:1px solid rgba(42, 109, 244, 0.3); padding-bottom:5px;">
+                    <i class="fas fa-chess-king" style="color:#2a6df4;"></i> DIRECTION & ÉTAT-MAJOR
+                </h3>
+                 
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+                    <div style="background:#222; padding:10px; border-radius:4px;">
+                        <strong style="color:#88aaff; font-size:0.85rem;">Thierry HUGONY (Adj. Ops)</strong>
+                        <ul style="margin:5px 0 0 15px; padding:0; font-size:0.75rem; color:#bbb;">
+                            <li> Pilote budget DC & Dossiers "tête haute" FARN.</li>
+                            <li> Appui transverse DDC & Note orga.</li>
+                            <li> Animation des chefs de SR.</li>
+                        </ul>
+                    </div>
+                    <div style="background:#222; padding:10px; border-radius:4px;">
+                        <strong style="color:#88aaff; font-size:0.85rem;">Eric PHILIP (Adj. Technique)</strong>
+                        <ul style="margin:5px 0 0 15px; padding:0; font-size:0.75rem; color:#bbb;">
+                            <li> Pilote portefeuille doc "crise".</li>
+                            <li> Animation ONC (GPF équipes nationales).</li>
+                            <li> Innovation, PMT & Lien MOA DPN.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:4px; margin-bottom:10px;">
+                    <strong style="color:#aaa; font-size:0.75rem; text-transform:uppercase;">Pôle Expertise & Doctrine :</strong>
+                    <ul style="font-size:0.75rem; margin:5px 0 0 20px; padding:0; color:#ddd; display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                        <li>
+                            <strong style="color:#fff;">N. ROUSSEL :</strong> Pilote GCAC, SPAC (Thermo), Relations Int. (AIEA/WANO).
+                        </li>
+                        <li>
+                            <strong style="color:#fff;">O. FERRAND :</strong> Doctrine Ops (Post-Fukushima, Noyau Dur), Saisines ASN.
+                        </li>
+                        <li>
+                            <strong style="color:#fff;">F. FRZEAL :</strong> PCA DPN, MOE DC, Pilotage ONC & Appuis OSART.
+                        </li>
+                        <li>
+                            <strong style="color:#fff;">J. DZIECHCIARZ :</strong> Liaison Min. Int, Exos Préfecture, Incendie (SDI).
+                        </li>
+                    </ul>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:4px;">
+                    <strong style="color:#aaa; font-size:0.75rem; text-transform:uppercase;">Support & Communication :</strong>
+                    <div style="font-size:0.75rem; color:#bbb; margin-top:5px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                         <div><strong style="color:#fff;">C. MICHEL & M. ALAGUIRY :</strong> Habilitations, Logistique, FIDAA, Achats.</div>
+                         <div><strong style="color:#fff;">S. TABET AOUL :</strong> Com Externe/Interne, Exos FARN.</div>
+                         <div><strong style="color:#fff;">A. ABIDA :</strong> Contrôle de gestion, PMT, Analyse coûts.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:#222; border:1px solid #333; padding:15px; border-radius:6px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <strong style="color:#2a6df4; font-size:1rem;">1. BIM - INGÉNIERIE & MÉTHODES</strong>
+                    <span style="background:#2a6df4; color:#fff; padding:2px 6px; border-radius:3px; font-size:0.7rem;">MANAGER : A. BONNIN</span>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; font-size:0.75rem;">
+                    <div>
+                        <strong style="color:#ddd; text-decoration:underline; display:block; margin-bottom:4px;">Sûreté & Accident Grave</strong>
+                        <ul style="margin:0; padding-left:15px; color:#bbb;">
+                            <li><strong>F. COPPIN :</strong> Pilote GIAG/GAEC, Contrats Assystem/Framatome.</li>
+                            <li><strong>E. LUZIN :</strong> Référentiel AG (EPR notamment).</li>
+                            <li><strong>A. DAMMAN :</strong> Appui MOA, Référentiels AG.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color:#ddd; text-decoration:underline; display:block; margin-bottom:4px;">Référentiels & Environnement</strong>
+                        <ul style="margin:0; padding-left:15px; color:#bbb;">
+                            <li><strong>S. FILTOPOULOS :</strong> Rédacteur PUI/PAM, Org Crise EPR2.</li>
+                            <li><strong>K. PALUSZAK :</strong> Réf. National, Météo France, Post-Accidentel.</li>
+                            <li><strong>E. MARTIN :</strong> Conformité Env., Ligne RR2.</li>
+                        </ul>
+                    </div>
+                    <div style="grid-column: span 2; border-top:1px dashed #444; padding-top:8px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <div>
+                             <strong style="color:#ddd;">Transverse :</strong>
+                             <span style="color:#bbb;"><strong>F. PETIT :</strong> Anim. COP PUI, Assurances. <br><strong>M. POLVEREL :</strong> SOER Fukushima, CCL.</span>
+                        </div>
+                        <div>
+                             <strong style="color:#ddd;">Sécurité RP :</strong>
+                             <span style="color:#bbb;"><strong>F. AUGEREAU :</strong> Pilote Sécu DC/FARN, RP. <br><strong>B. MOREL :</strong> Affaires Missions FARN (UMB, SEU).</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:#222; border:1px solid #333; padding:15px; border-radius:6px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <strong style="color:#2a6df4; font-size:1rem;">2. BPCO - PRÉPARATION & OPS</strong>
+                    <span style="background:#2a6df4; color:#fff; padding:2px 6px; border-radius:3px; font-size:0.7rem;">MANAGER : L. MARTINIE</span>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; font-size:0.75rem;">
+                    <div>
+                        <strong style="color:#ddd; text-decoration:underline; display:block; margin-bottom:4px;">Pilotage Exercices & Entraînement</strong>
+                        <ul style="margin:0; padding-left:15px; color:#bbb;">
+                            <li><strong>D. CAILLE :</strong> Pilotage Exos Nationaux Int/Ext, DP2D.</li>
+                            <li><strong>M. BELAEN :</strong> Prépa Exos Nationaux & PC.</li>
+                            <li><strong>D. MESTRE :</strong> Corresp. Framatome/Eskom, Exos.</li>
+                            <li><strong>A. JOACHIM :</strong> Exos PC, Qualité Opérabilité FARN.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color:#ddd; text-decoration:underline; display:block; margin-bottom:4px;">Compétences & Pro</strong>
+                        <ul style="margin:0; padding-left:15px; color:#bbb;">
+                            <li><strong>V. TORRE :</strong> Planif Formation FARN, Astreintes.</li>
+                            <li><strong>S. CHUZEL :</strong> MOA Formations, Préfet Simulé.</li>
+                            <li><strong>M. GAILLARDON :</strong> Dérogations, Admin VP ENF.</li>
+                        </ul>
+                    </div>
+                    <div style="grid-column: span 2; border-top:1px dashed #444; padding-top:8px;">
+                         <strong style="color:#ddd;">REX & Méthodes :</strong> 
+                         <span style="color:#bbb;">
+                            <strong>B. TODISCO :</strong> Analyse REX niv 2, Tactiques FARN. | 
+                            <strong>F. MOREL :</strong> Indicateurs MCP, TGS. | 
+                            <strong>O. GEBUHRER :</strong> Appui logistique.
+                          </span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:rgba(254, 88, 0, 0.05); border:1px solid #442211; padding:15px; border-radius:6px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <strong style="color:#FE5800; font-size:1rem;">3. BMT - MOYENS TECHNIQUES</strong>
+                    <span style="background:#FE5800; color:#fff; padding:2px 6px; border-radius:3px; font-size:0.7rem;">MANAGER : F. GARIGON</span>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; font-size:0.75rem;">
+                    <div>
+                        <strong style="color:#FE5800;">Logistique & Maintenance</strong>
+                        <ul style="margin:0; padding-left:15px; color:#bbb;">
+                            <li><strong>F. BOURGET :</strong> Plan chargement, Conv. ALN.</li>
+                            <li><strong>E. MULLER :</strong> Base St Leu, Véhicules DC.</li>
+                            <li><strong>J. QUESNEY :</strong> MCO (Eau, Fuel, Telecom), Marchés.</li>
+                            <li><strong>O. PERLICIUS :</strong> MCO (Elec, Air, UMB).</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color:#FE5800;">SI & Télécoms</strong>
+                        <ul style="margin:0; padding-left:15px; color:#bbb;">
+                            <li><strong>O. GONCALVES :</strong> SI Tactique, Tetra, VSAT.</li>
+                            <li><strong>F. PRIEUR :</strong> SI Crise, FR Alert, RMTC.</li>
+                            <li><strong>F. SCHER :</strong> Moyen Numérique FARN.</li>
+                        </ul>
+                    </div>
+                    <div style="grid-column: span 2; border-top:1px dashed #633; padding-top:8px;">
+                         <strong style="color:#FE5800;">Local Crise (LTCN) & Méthodes :</strong> 
+                         <span style="color:#bbb;">
+                            <strong>N. BOULAHCEN :</strong> Resp. LTCN Wagram. | 
+                            <strong>C. COLLAS :</strong> Doc Ops, PCA SDIN. |
+                            <strong>T. ZOKPE :</strong> Pilote DDR/DI. | 
+                            <strong>M. SIDIBE :</strong> Fiches Réflexe.
+                          </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="background:#202020; border-radius:6px; padding:15px; border:1px solid #444; height:fit-content;">
+             
+            <div style="text-align:center; margin-bottom:20px; border-bottom:1px solid #FE5800; padding-bottom:10px;">
+                <h3 style="color:#FE5800; margin:0; font-size:1.4rem;">LA FORCE D'ACTION RAPIDE</h3>
+                <span style="color:#aaa; font-size:0.8rem;">"L'Assurance Vie du Nucléaire"</span>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:4px; margin-bottom:20px; display:flex; gap:10px;">
+                <div style="flex:1; text-align:center;">
+                    <div style="font-size:1.2rem; font-weight:bold; color:#fff;">50%</div>
+                    <div style="font-size:0.65rem; color:#aaa;">MÉTIER SITE<br>(Maintenance/Conduite)</div>
+                </div>
+                <div style="width:1px; background:#444;"></div>
+                <div style="flex:1; text-align:center;">
+                    <div style="font-size:1.2rem; font-weight:bold; color:#FE5800;">50%</div>
+                    <div style="font-size:0.65rem; color:#aaa;">FARN<br>(Entraînement/Crise)</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom:25px;">
+                <h4 style="color:#fff; margin:0 0 10px 0; font-size:0.9rem; border-left:3px solid #FE5800; padding-left:8px;">
+                    LES 4 SERVICES RÉGIONAUX
+                </h4>
+                <div style="display:grid; grid-template-columns: 1fr; gap:8px;">
+                    <div style="background:#2a2a2a; padding:8px; border-radius:4px; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="color:#FE5800; font-weight:bold; font-size:0.8rem;">BUGEY</span>
+                        <span style="color:#fff; font-size:0.8rem;">Boris BEAUVIE</span>
+                    </div>
+                    <div style="background:#2a2a2a; padding:8px; border-radius:4px; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="color:#FE5800; font-weight:bold; font-size:0.8rem;">CIVAUX</span>
+                        <span style="color:#fff; font-size:0.8rem;">Frédéric GERMANEAU</span>
+                    </div>
+                    <div style="background:#2a2a2a; padding:8px; border-radius:4px; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="color:#FE5800; font-weight:bold; font-size:0.8rem;">DAMPIERRE</span>
+                        <span style="color:#fff; font-size:0.8rem;">Lloyd ALVADO</span>
+                    </div>
+                    <div style="background:#2a2a2a; padding:8px; border-radius:4px; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="color:#FE5800; font-weight:bold; font-size:0.8rem;">PALUEL</span>
+                        <span style="color:#fff; font-size:0.8rem;">Marc BERBEZY</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:rgba(254, 88, 0, 0.1); padding:10px; border-radius:4px; margin-bottom:20px;">
+                <strong style="color:#FE5800; font-size:0.8rem;">Missions d'un Chef de SR :</strong>
+                <ul style="margin:5px 0 0 15px; padding:0; font-size:0.7rem; color:#bbb;">
+                    <li> Interface DC / SR / CNPE.</li>
+                    <li> Contrat annuel d'objectifs & Performance.</li>
+                    <li> Opérabilité matériels & colonnes.</li>
+                    <li> Préparation Ops & Entraînement.</li>
+                    <li> Remontée indicateurs pilotage.</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="color:#fff; margin:0 0 10px 0; font-size:0.9rem; border-left:3px solid #FE5800; padding-left:8px;">
+                    ORGANISATION TACTIQUE
+                </h4>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:5px;">
+                    <div style="background:#333; padding:5px; font-size:0.7rem; color:#ccc; text-align:center; border-radius:3px;">1. Commandement</div>
+                    <div style="background:#333; padding:5px; font-size:0.7rem; color:#ccc; text-align:center; border-radius:3px;">2. Intervention</div>
+                    <div style="background:#333; padding:5px; font-size:0.7rem; color:#ccc; text-align:center; border-radius:3px;">3. Logistique</div>
+                    <div style="background:#333; padding:5px; font-size:0.7rem; color:#ccc; text-align:center; border-radius:3px;">4. Base Arrière</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin-top:30px; border-top:1px solid #333; padding-top:20px;">
+        <h4 style="color:#888; margin:0 0 15px 0; text-transform:uppercase; font-size:0.85rem;">
+            <i class="fas fa-book"></i> Glossaire des Acronymes
+        </h4>
+        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:12px; font-size:0.7rem; color:#aaa;">
+            <div><strong style="color:#fff;">DC :</strong> Direction de Crise</div>
+            <div><strong style="color:#FE5800;">FARN :</strong> Force d'Action Rapide Nucléaire</div>
+            <div><strong style="color:#fff;">SR / CSR :</strong> Service Régional / Chef de Service</div>
+            <div><strong style="color:#fff;">BIM :</strong> Branche Ingénierie et Méthodes</div>
+            <div><strong style="color:#fff;">BPCO :</strong> Branche Préparation Comp. et Ops.</div>
+            <div><strong style="color:#FE5800;">BMT :</strong> Branche Moyens Techniques</div>
+            <div><strong style="color:#fff;">ONC :</strong> Organisation Nationale de Crise</div>
+            <div><strong style="color:#fff;">LTCN :</strong> Local Technique de Crise National</div>
+            <div><strong style="color:#fff;">PUI / PAM :</strong> Plan Urgence Interne / Aide Mutuelle</div>
+            <div><strong style="color:#fff;">MOA / MOE :</strong> Maîtrise d'Ouvrage / d'Œuvre</div>
+            <div><strong style="color:#fff;">PMT :</strong> Plan Moyen Terme</div>
+            <div><strong style="color:#fff;">GIAG / GAEC :</strong> Guides Accident Grave / Complémentaire</div>
+            <div><strong style="color:#fff;">FIDAA :</strong> Fiche Individuelle de Demande d'Accès</div>
+            <div><strong style="color:#FE5800;">MCO :</strong> Maintien en Condition Opérationnelle</div>
+            <div><strong style="color:#fff;">PCA :</strong> Plan de Continuité d'Activité</div>
+            <div><strong style="color:#fff;">GCAC :</strong> Groupe de Contact Accident Grave</div>
+        </div>
+    </div>
+
+</div>
+        </div>
+
+        <h4 style="color:#fff; margin-bottom:15px; border-bottom: 1px dashed #555; display:inline-block; padding-bottom:5px;">
+    <i class="fas fa-cogs" style="color:#FE5800;"></i> 2. FONCTIONNEMENT DÉTAILLÉ & MISSIONS FARN
+</h4>
+<div style="border-left: 4px solid #ff4444; background:rgba(60, 20, 20, 0.6); padding:15px; margin-bottom:20px; border-radius:0 4px 4px 0; display:flex; gap:15px; align-items:center;">
+    <div style="font-size:1.5rem; color:#ff4444; min-width:50px; text-align:center;">
+        <i class="fas fa-user-lock"></i>
+    </div>
+    <div>
+        <strong style="color:#ff4444; font-size:0.85rem; text-transform:uppercase;">
+            DOCUMENT SIMPLIFIÉ
+        </strong>
+        <p style="font-size:0.75rem; color:#ccc; margin:5px 0 5px 0; line-height:1.4;">
+            Pour des raisons de <strong>SÉCURITÉ </strong> et de confidentialités , les plans offcielles et techniques ne sortent jamais de l'intranet EDF. Ce schéma illustre le principe fonctionnel.
+        </p>
+        <p style="font-size:0.7rem; color:#aaa; margin:0;">
+            <i class="fas fa-link"></i> Source publique de référence : 
+            <a href="https://recherche-expertise.asnr.fr/savoir-comprendre/surete/composants-dun-reacteur-detail" target="_blank" style="color:#aaa; text-decoration:underline;">ASNR - Les composants d'un réacteur en détail</a>
+        </p>
+    </div>
+</div>
+<div style="border-left: 3px solid #ffcc00; background:rgba(255, 204, 0, 0.1); padding:10px; margin-bottom:20px; border-radius:0 4px 4px 0;">
+    <p style="font-size:0.75rem; color:#ddd; margin:0;">
+        <strong style="color:#ffcc00;"><i class="fas fa-exclamation-triangle"></i> NOTE TECHNIQUE :</strong> 
+        Ce diagramme fonctionnel met en évidence les systèmes de sauvegarde (ASG, Décharge) sur lesquels la FARN se connecte en priorité.
+    </p>
+</div>
+
+<div style="background:rgba(255,255,255,0.03); padding:15px; border:1px solid #333; margin-bottom:20px; border-radius:4px;">
+    <div style="display:flex; gap:20px; align-items:start;">
+        <div style="width:55%; cursor:pointer;" onclick="openModal('SCHEMA TECHNIQUE', true, 'Image/REP.jpg')">
+            <img src="Image/REP.jpg" style="width:100%; border-radius:4px; border:1px solid #555; background:#fff; padding:5px; image-rendering: -webkit-optimize-contrast;" alt="Schéma détaillé REP">
+        </div>
+        <div style="width:45%; font-size:0.85rem; color:#ccc; text-align:justify;">
+            <strong style="color:#FE5800;">ANALYSE SYSTÈME :</strong><br>
+            Ce schéma montre la gestion des flux d'énergie. Pour la FARN, trois composants visibles ici sont critiques :
+            <ul style="margin:5px 0 10px 20px; padding:0; list-style-type: square; color:#aaa;">
+                <li><strong>L'ASG (Au centre) :</strong> La porte d'entrée pour l'eau de secours.</li>
+                <li><strong>Les Vannes Vapeur (En haut) :</strong> La sortie pour évacuer la chaleur.</li>
+                <li><strong>Le Pressuriseur :</strong> Le témoin de l'état du cœur.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; margin-bottom:30px;">
+     
+    <div style="border:1px solid #FE5800; background:rgba(254, 88, 0, 0.05); padding:10px; border-radius:4px;">
+        <strong style="color:#FE5800; font-size:0.8rem; display:block; margin-bottom:5px; border-bottom:1px solid #FE5800;">1. PRIMAIRE (CONFINEMENT)</strong>
+        <p style="font-size:0.7rem; color:#aaa; margin:0; line-height:1.4;">
+            <strong style="color:#fff;">• Le Pressuriseur :</strong> Maintient l'eau à 155 bars. Les <strong style="color:#FE5800;">soupapes</strong> (haut gauche) protègent la cuve contre l'explosion.<br>
+            <strong style="color:#fff;">• Le RCV :</strong> (Bas) Ajuste la chimie et le volume d'eau.<br>
+            <strong style="color:#FE5800;">Enjeu FARN :</strong> Maintenir le niveau d'eau dans la cuve pour couvrir le combustible.
+        </p>
+    </div>
+
+    <div style="border:1px solid #fff; background:rgba(255, 255, 255, 0.05); padding:10px; border-radius:4px;">
+        <strong style="color:#fff; font-size:0.8rem; display:block; margin-bottom:5px; border-bottom:1px solid #fff;">2. SECONDAIRE (ÉVACUATION)</strong>
+        <p style="font-size:0.7rem; color:#aaa; margin:0; line-height:1.4;">
+            <strong style="color:#fff;">• Décharge Atmosphère :</strong> En cas d'arrêt, on évacue la vapeur dehors via ces vannes.<br>
+            <strong style="color:#fff;">• ASG (Secours) :</strong> Visible au centre ("Alimentation de secours"). C'est le circuit vital quand l'alimentation normale (ARE) est perdue.
+        </p>
+    </div>
+
+    <div style="border:1px solid #2a6df4; background:rgba(42, 109, 244, 0.05); padding:10px; border-radius:4px;">
+        <strong style="color:#2a6df4; font-size:0.8rem; display:block; margin-bottom:5px; border-bottom:1px solid #2a6df4;">3. SOURCE FROIDE</strong>
+        <p style="font-size:0.7rem; color:#aaa; margin:0; line-height:1.4;">
+            <strong style="color:#fff;">• Le Condenseur :</strong> Refroidit la vapeur grâce à l'eau du fleuve/mer.<br>
+            <strong style="color:#2a6df4;">Enjeu FARN :</strong> En situation de crise "Perte Totale", ce circuit est souvent perdu (pompes HS). La FARN doit compenser cette perte par des moyens mobiles.
+        </p>
+    </div>
+</div>
+
+<h4 style="color:#00ff00; margin:30px 0 15px 0; border-bottom: 1px dashed #00ff00; display:inline-block; padding-bottom:5px;">
+    <i class="fas fa-life-ring"></i> INTERVENTION FARN : LES POINTS D'ANCRAGE
+</h4>
+
+<div style="background:rgba(0, 255, 0, 0.03); border:1px solid #005500; padding:15px; border-radius:4px;">
+    <p style="font-size:0.85rem; color:#ccc; margin-bottom:15px;">
+        En situation d'accident grave (type Fukushima), les circuits normaux (Bleu et Orange) sont inopérants. La mission de la FARN est de <strong>reconnecter une source froide mobile</strong> sur les points clés du schéma :
+    </p>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
+        
+        <div style="display:flex; gap:15px; align-items:center; border-bottom:1px solid #333; padding-bottom:10px;">
+            <div style="color:#2a6df4; font-size:1.5rem; min-width:50px; text-align:center;"><i class="fas fa-tint"></i></div>
+            <div>
+                <strong style="color:#fff; font-size:0.9rem;">1. ALIMENTER LES GV (Circuit ASG)</strong>
+                <p style="font-size:0.75rem; color:#aaa; margin:0;">
+                    Sur le schéma, repérez la ligne <em>"Alimentation de secours des GV (ASG)"</em>. La FARN déploie des motopompes mobiles pour injecter de l'eau ici.
+                    <br><strong>Objectif :</strong> Tant qu'il y a de l'eau dans le Générateur de Vapeur, le cœur (Primaire) peut refroidir par échange thermique.
+                </p>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:15px; align-items:center; border-bottom:1px solid #333; padding-bottom:10px;">
+            <div style="color:#fff; font-size:1.5rem; min-width:50px; text-align:center;"><i class="fas fa-cloud"></i></div>
+            <div>
+                <strong style="color:#fff; font-size:0.9rem;">2. OUVRIR LES VANNES (Décharge Atmosphère)</strong>
+                <p style="font-size:0.75rem; color:#aaa; margin:0;">
+                    Repérez les <em>"Soupapes vapeur"</em> et <em>"Système de décharge"</em> en haut. Si le condenseur ne marche plus, il faut ouvrir ces vannes manuellement ou via groupe électrogène mobile.
+                    <br><strong>Objectif :</strong> Évacuer la chaleur sous forme de vapeur dans l'air (Panache blanc).
+                </p>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:15px; align-items:center;">
+            <div style="color:#FE5800; font-size:1.5rem; min-width:50px; text-align:center;"><i class="fas fa-bolt"></i></div>
+            <div>
+                <strong style="color:#fff; font-size:0.9rem;">3. RÉALIMENTER LE CONTRÔLE</strong>
+                <p style="font-size:0.75rem; color:#aaa; margin:0;">
+                    Sans électricité, on est "aveugle". La FARN branche des diesels d'ultime secours (DUS) pour réalimenter l'instrumentation (savoir le niveau d'eau au Pressuriseur) et les vannes motorisées.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div style="background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%); border: 1px solid #444; border-radius: 8px; padding: 20px; margin-bottom: 30px; position: relative; overflow: hidden;">
+    
+    <div style="position: absolute; top: -10px; right: -10px; font-size: 8rem; color: rgba(255, 255, 255, 0.03); transform: rotate(15deg);">
+        <i class="fas fa-wifi"></i>
+    </div>
+
+    <h4 style="color:#2a6df4; margin:0 0 15px 0; border-bottom: 1px solid rgba(42, 109, 244, 0.3); padding-bottom:10px; font-size: 1rem;">
+        <i class="fas fa-broadcast-tower"></i> FOCUS TECHNIQUE : LA CAGE DE FARADAY & ZONES D'OMBRE
+    </h4>
+
+    <div style="display: flex; gap: 20px;">
+        
+        <div style="flex: 1;">
+            
+            <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+                <strong style="color: #fff; font-size: 0.85rem;">1. Le Principe Physique</strong>
+                <p style="font-size: 0.75rem; color: #bbb; line-height: 1.5; margin-top: 5px;">
+                    Une cage de Faraday est une enceinte constituée de matériaux conducteurs (métal). Lorsqu'elle est soumise à un champ électromagnétique externe (ondes radio), les charges électriques se redistribuent à la surface du conducteur, annulant le champ à l'intérieur.
+                    <br><strong style="color: #FE5800;">Résultat :</strong> Les ondes (Tetra, Iridium) ne rentrent pas et ne sortent pas.
+                </p>
+            </div>
+            
+            <div style="background: rgba(42, 109, 244, 0.1); border-left: 3px solid #2a6df4; padding: 10px; border-radius: 0 4px 4px 0;">
+                <strong style="color: #2a6df4; font-size: 0.85rem;">2. Application au CNPE (Bâtiment Réacteur)</strong>
+                <p style="font-size: 0.75rem; color: #ccc; line-height: 1.5; margin-top: 5px;">
+                    Un Bâtiment Réacteur (BR) est la cage de Faraday parfaite par conception :
+                </p>
+                <ul style="font-size: 0.75rem; color: #aaa; padding-left: 15px; margin-bottom: 0;">
+                    <li><strong>Murs :</strong> Béton précontraint de ~1m d'épaisseur.</li>
+                    <li><strong>Ferraillage :</strong> Densité extrême de barres d'acier (armatures).</li>
+                    <li><strong>Peau d'étanchéité :</strong> Une doublure en acier de 6mm recouvre toute la paroi interne.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+            
+            <div>
+                <strong style="color: #FE5800; font-size: 0.9rem; text-transform: uppercase;">
+                    <i class="fas fa-exclamation-circle"></i> Contraintes Opérationnelles
+                </strong>
+                <div style="margin-top: 10px; display: grid; gap: 10px;">
+                    <div style="background: #2a2a2a; padding: 10px; border-radius: 4px; border: 1px solid #333;">
+                        <div style="color: #fff; font-size: 0.8rem; font-weight: bold;">Perte de Liaison TACTIQUE</div>
+                        <div style="color: #888; font-size: 0.7rem;">Dès qu'un binôme FARN pénètre dans le BR ou les locaux électriques (BAN), les radios TETRA cessent d'émettre vers le PC Crise.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(0, 255, 0, 0.05); border: 1px dashed #00aa00; padding: 10px; border-radius: 4px; margin-top: 15px;">
+                <strong style="color: #00ff00; font-size: 0.8rem;">
+                    <i class="fas fa-check-circle"></i> Solutions Techniques FARN
+                </strong>
+                <ul style="font-size: 0.7rem; color: #ccc; margin: 5px 0 0 15px; padding: 0;">
+                    <li><strong>Les PLUGS :</strong> Utilisation de connecteurs passifs traversant l'enceinte (presse-étoupes spéciaux) pour relier une antenne externe à une antenne interne.</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<h4 style="color:#2a6df4; margin-bottom:10px; border-top:1px dashed #333; padding-top:10px;"><i class="fas fa-graduation-cap"></i> COMPÉTENCES CRITIQUES</h4>
+            <div style="margin-bottom:15px;">
+                <span class="edf-btn active" style="padding:5px 10px; font-size:0.8rem; display:inline-block; margin-bottom:5px; background:rgba(42, 109, 244, 0.2); color:#2a6df4; border:1px solid #2a6df4; border-radius:3px;">
+                    RT2 – Connecter les entreprises et les usagers
+                </span>
+                <ul style="font-size:0.8rem; color:#aaa; line-height:1.4; margin-top:0; padding-left:20px;">
+                    <li>Découverte de la cage de FARADAY</li>
+                    <li>Propagations des ondes</li>
+                    <li>Longueurs d'onde d'absorbtion des matériaux</li>
+                </ul>
+            </div>
+            <div style="margin-bottom:15px;">
+                <span class="edf-btn active" style="padding:5px 10px; font-size:0.8rem; display:inline-block; margin-bottom:5px; background:rgba(42, 109, 244, 0.2); color:#2a6df4; border:1px solid #2a6df4; border-radius:3px;">
+                    Connaissance personelles
+                </span>
+                <ul style="font-size:0.8rem; color:#aaa; line-height:1.4; margin-top:0; padding-left:20px;">
+                    <li> Connaissance sur le fonctionnement d'une tranche nucléaire</li>
+                    <li> Culture du nucléaire </li>
+                    <li> Communications avec différents agent collègues, manager et directeur </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+   <div style="background:rgba(255,255,255,0.02); padding:20px; border-radius:4px; margin-top:20px; border:1px solid #333; border-left: 4px solid #FE5800;">
+    <h4 style="color:#FE5800; margin-top:0; border-bottom:1px solid #444; padding-bottom:10px; margin-bottom:15px;">
+        <i class="fas fa-brain"></i> ANALYSE RÉFLEXIVE & RETOUR D'EXPÉRIENCE
+    </h4>
+
+    <div style="display:grid; grid-template-columns: 1fr; gap:15px;">
+         
+        <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:4px;">
+            <strong style="color:#fff; display:block; margin-bottom:5px;">
+                <i class="fas fa-exclamation-triangle" style="color:#FE5800; margin-right:5px;"></i> 
+                Découvertes de la DC et de la FARN
+            </strong>
+            <p style="color:#aaa; font-size:0.85rem; margin:0; line-height:1.5;">
+                <strong>Constat :</strong> La Direction de Crise et la FARN sont des entités peut connus par le grand public, avant de les intégrer je n'avais pas connaissance de ses entités malgrès leur importance dans la suretés du nucléaire en cas d'accident grave. <br>
+
+        <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:4px;">
+            <strong style="color:#fff; display:block; margin-bottom:5px;">
+                <i class="fas fa-filter" style="color:#2a6df4; margin-right:5px;"></i> 
+                Connaissance du Process Nucléaire 
+            </strong>
+            <p style="color:#aaa; font-size:0.85rem; margin:0; line-height:1.5;">
+                <strong>Constat :</strong> Dans la réalisation de ma maquette, j'ai besoin de connaitre les missions FARN et donc d'avoir une idées du fonctionnement d'un CNPE.<br>
+                <strong>Analyse :</strong> J'ai assimilé le fonctionnement d'un réacteur à eau préssurisé dont j'ai assimilé les éléments faisant parties des missions de la FARN.
+                 <strong> A ameliorer: </strong> En tant qu'acteur du nucléaire et de la sureté, je ne possède pas encore le vocabulaire techniques et précis attendus d'un agent EDF. De plus je ne suis pas encore en mesure d'etre autonomme sur tous le vocabulaire techniques. Je suis reégulièrement perdus dans une conversation techniques mais je sais demandé les renseignements nécessaire quand j'en ai le besoin.
+        </div>
+
+        <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:4px;">
+            <strong style="color:#fff; display:block; margin-bottom:5px;">
+                <i class="fas fa-cloud-showers-heavy" style="color:#00ff00; margin-right:5px;"></i> 
+                Problématique Télécoms & Cage de Faraday
+            </strong>
+            <p style="color:#aaa; font-size:0.85rem; margin:0; line-height:1.5;">
+                <strong>Le défi :</strong> En théorie, la remorque télécoms se connecte au satellite VSAT et irrigue le site en radio. En réalité, le CNPE est un environnement hostile aux ondes.<br>
+                <strong>Analyse Technique :</strong> J'ai compris que le Bâtiment Réacteur agit comme une <strong>cage de Faraday</strong> parfaite à cause de sa peau d'étanchéité métallique. Cela impose à la FARN de ne pas seulement "poser" des antennes, mais de comprendre l'architecture physique du site pour utiliser les "Plugs" (passe-cloisons).<br>
+                <strong>Point de vigilance :</strong> La dépendance au satellite (VSAT) est une fragilité. Si la connexion Sud est masquée (bâtiment, relief) ou si le satellite est HS, toute la chaîne de commandement tactique est aveugle.
+            </p>
+        </div>
+
+    </div>
+    <div style="background:rgba(42, 109, 244, 0.02); padding:20px; border-radius:4px; margin-top:20px; border:1px solid #333; border-left: 4px solid #2a6df4; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+    <div>
+        <h4 style="color:#2a6df4; margin:0 0 5px 0; font-size:1rem;">
+            <i class="fas fa-file-pdf"></i> PREUVE DE VALIDATION
+        </h4>
+        <div style="color:#aaa; font-size:0.8rem; line-height:1.4;">
+            Support de présentation de la Direction de Crise (DC).<br>
+            <span style="color:#666;">Document PDF</span>
+        </div>
+    </div>
+    
+    <a href="Presentation_DC.pdf" target="_blank" style="text-decoration: none;">
+        <button 
+            onmouseover="this.style.background='#2a6df4'; this.style.color='#000'; this.style.boxShadow='0 0 15px rgba(42, 109, 244, 0.4)'" 
+            onmouseout="this.style.background='transparent'; this.style.color='#2a6df4'; this.style.boxShadow='none'" 
+            style="
+                background: transparent;
+                border: 1px solid #2a6df4;
+                color: #2a6df4;
+                padding: 10px 20px;
+                font-family: 'Share Tech Mono', monospace;
+                font-size: 0.9rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                border-radius: 2px;
+                display:flex; align-items:center; gap:10px;
+            ">
+            <i class="fas fa-download"></i> TÉLÉCHARGER LE DOCUMENT
+        </button>
+    </a>
+</div>
+</div>
+<div class="edf-card" style="border-left: 4px solid #FFD700; background-color: #1a1d23; padding: 20px; color: #ccc; margin-top: 30px; font-family: 'Segoe UI', sans-serif;">
+
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid #444; padding-bottom:15px; margin-bottom:20px;">
+        <div>
+            <h2 style="color:#fff; margin:0; font-size:1.5rem; text-transform:uppercase; letter-spacing:1px;">MISSION 03 : MAQUETTE TOTR </h2>
+            <div style="color:#FFD700; font-family:'Share Tech Mono', monospace; margin-top:5px; font-size:0.9rem;">
+                <span style="border:1px solid #FFD700; padding:2px 5px;">JANVIER 2026</span> <i class="fas fa-arrow-right" style="font-size:0.7rem;"></i> <span style="border:1px solid #FFD700; padding:2px 5px;">EN COURS</span>
+            </div>
+        </div>
+        <div style="font-size:3rem; color:rgba(255, 215, 0, 0.1);"><i class="fas fa-tablet-alt"></i></div>
+    </div>
+
+    <h4 style="color:#FFD700; margin-bottom:10px; border-bottom: 1px dashed #FFD700; display:inline-block; padding-bottom:5px;">
+        <i class="fas fa-crosshairs"></i> CONTEXTE ET ENJEUX
+    </h4>
+    <p style="color:#ccc; font-size:0.9rem; line-height:1.6; margin-bottom:25px; text-align:justify;">
+        Dans le cadre de ses missions, la FARN a exprimé le besoin de transmettre des flux de data notamment des images via des tablettes via TEAM On The Run (messagerie chiffrée). Ces tablettes doivent être faciles d'utilisation, intuitives et être utilisables par n'importe quel agent de la FARN.
+    </p>
+
+    <h4 style="color:#FFD700; margin-bottom:10px; border-bottom: 1px dashed #FFD700; display:inline-block; padding-bottom:5px;">
+        <i class="fas fa-boxes"></i> TÂCHES À RÉALISER
+    </h4>
+    <ul style="color:#ccc; font-size:0.9rem; line-height:1.6; padding-left:20px; margin-bottom:30px;">
+        <li style="margin-bottom:10px;"> Traduire les besoins de la FARN en exigences techniques. </li>
+        <li style="margin-bottom:10px;">Gestion d'un parc informatique de tablettes (15 au total). </li>
+        <li style="margin-bottom:10px;">Respecter des enjeux du point de vue cybersécurité (ANSSI).</li>
+        <li style="margin-bottom:10px;"> Tester la maquette lors des exercices.</li>
+    </ul>
+
+    <div class="edf-card" style="background:rgba(255,255,255,0.02); margin-bottom:20px; border:1px solid #333;">
+        <h3 style="color:#fff; border-left:3px solid #FFD700; padding-left:10px; margin-top:0;">
+            <span style="color:#FFD700;">PHASE 1 :</span> INGÉNIERIE DU BESOIN (2 CIBLES)
+        </h3>
+        <p style="font-size:0.85rem; color:#ccc;">
+            Analyse des fichiers de recensement "Outils Numériques" et production de deux supports de synthèse.
+        </p>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:15px;">
+            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:4px; border-top: 2px solid #FFD700;">
+                <strong style="color:#fff; font-size:0.9rem;"><i class="fas fa-user-tie"></i> CIBLE 1 : CHEFS DE COLONNE</strong>
+                <p style="font-size:0.75rem; color:#aaa; margin-top:5px;">Besoin : Vision globale, Cartographie, Planification.</p>
+                <div style="margin-top:10px; color:#FFD700; font-size:0.75rem;"><i class="fas fa-file-powerpoint"></i> Livrable : PPT_Synthese_CDC.pptx</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:4px; border-top: 2px solid #FFD700;">
+                <strong style="color:#fff; font-size:0.9rem;"><i class="fas fa-hiking"></i> CIBLE 2 : ÉQUIPE RECO</strong>
+                <p style="font-size:0.75rem; color:#aaa; margin-top:5px;">Besoin : Mode Kiosque, Photos géolocalisées, Robustesse.</p>
+                <div style="margin-top:10px; color:#FFD700; font-size:0.75rem;"><i class="fas fa-file-powerpoint"></i> Livrable : PPT_Synthese_RECO.pptx</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="edf-card" style="background:rgba(255,255,255,0.02); margin-bottom:20px; border:1px solid #333;">
+        <h3 style="color:#fff; border-left:3px solid #2a6df4; padding-left:10px; margin-top:0;">
+            <span style="color:#2a6df4;">PHASE 2 :</span> PRÉPARATION DU PARC (15 UNITÉS)
+        </h3>
+        <div style="display:flex; align-items:center; gap:15px; font-size:0.85rem; color:#ccc;">
+            <div style="font-size:2rem; color:#2a6df4;"><i class="fas fa-sync-alt"></i></div>
+            <div>
+                Remise à zéro industrielle (Hard Reset) pour obtenir un parc homogène.
+                <ul style="margin:5px 0 0 20px; color:#aaa; font-size:0.8rem;">
+                    <li>Wipe Data / Factory Reset & Mise à jour Patchs Sécurité.</li>
+                    <li>Installation des certificats de sécurité EDF.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="edf-card" style="background:rgba(255,255,255,0.02); margin-bottom:20px; border:1px solid #333;">
+        <h3 style="color:#fff; border-left:3px solid #FFD700; padding-left:10px; margin-top:0;">
+            <span style="color:#FFD700;">PHASE 3 :</span> PROTOCOLE DE CHIFFREMENT (MAQUETTE)
+        </h3>
+
+        <div style="display:flex; gap:20px; margin-bottom:15px;">
+            <div style="flex:1;">
+                <p style="font-size:0.85rem; color:#ccc; margin-top:0;">
+                    <strong>Objectif :</strong> Créer un environnement sécurisé (Conteneur Chiffré) sur la carte SD pour isoler les photos sensibles et garantir l'intégrité des données (conforme ANSSI).
+                </p>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <span style="background:#222; border:1px solid #444; padding:2px 8px; font-size:0.7rem; border-radius:3px; color:#FFD700;">EDS LITE</span>
+                    <span style="background:#222; border:1px solid #444; padding:2px 8px; font-size:0.7rem; border-radius:3px; color:#FFD700;">MACRODROID</span>
+                    <span style="background:#222; border:1px solid #444; padding:2px 8px; font-size:0.7rem; border-radius:3px; color:#FFD700;">VERACRYPT</span>
+                </div>
+            </div>
+            <div style="text-align:center; background:#111; padding:10px; border:1px solid #444; border-radius:4px; min-width:120px;">
+                <i class="fas fa-key" style="font-size:1.5rem; color:#FFD700; margin-bottom:5px;"></i>
+                <div style="font-family:'Share Tech Mono'; color:#fff; font-size:0.8rem;">AES-256</div>
+                <div style="font-size:0.65rem; color:#888;">+ SHA-512</div>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+            <div style="background:rgba(255, 215, 0, 0.05); padding:10px; border-radius:4px; border:1px solid rgba(255, 215, 0, 0.2);">
+                <strong style="color:#fff; font-size:0.8rem;"><i class="fas fa-box-open"></i> 1. LE CONTENEUR (EDS LITE)</strong>
+                <p style="font-size:0.75rem; color:#ccc; margin:5px 0;">
+                    Création d'un disque dur virtuel (format VeraCrypt) sur la carte SD. Données isolées et inaccessibles sans mot de passe.
+                </p>
+            </div>
+            <div style="background:rgba(255, 215, 0, 0.05); padding:10px; border-radius:4px; border:1px solid rgba(255, 215, 0, 0.2);">
+                <strong style="color:#fff; font-size:0.8rem;"><i class="fas fa-robot"></i> 2. L'AUTOMATE (MACRODROID)</strong>
+                <p style="font-size:0.75rem; color:#ccc; margin:5px 0;">
+                    Surveillance des dossiers. Si monté : déplacement auto. Si démonté : suppression auto (sécurité par défaut).
+                </p>
+            </div>
+        </div>
+
+        <h4 style="color:#FFD700; font-size:0.9rem; border-bottom:1px dashed #555; padding-bottom:5px; margin-bottom:15px;">
+            <i class="fas fa-camera"></i> CAPTURES D'ÉCRAN DE LA MAQUETTE
+        </h4>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+            <div style="background:#000; border:1px solid #444; border-radius:4px; overflow:hidden; cursor:pointer;" onclick="openModal('', true, 'Image/macro.jpg')">
+                <img src="Image/macro.jpg" alt="Logique MacroDroid" style="width:100%; height:200px; object-fit:cover; opacity:0.9;">
+                <div style="padding:8px; border-top:1px solid #333;">
+                    <div style="color:#FFD700; font-size:0.75rem; font-weight:bold;">1. LOGIQUE D'AUTOMATISATION</div>
+                    <p style="color:#aaa; font-size:0.7rem; margin:3px 0;">
+                        Script : Si conteneur ouvert > Déplacer. Sinon > Supprimer.
                     </p>
-
-
                 </div>
             </div>
-
-            <!-- Compétences overview -->
-            <div class="competences-grid">
-                <h3>Mes 3 Compétences BUT RT</h3>
-                <div class="grid">
-                    <a href="comp1.html" class="competence-card">
-                        <i class="fas fa-network-wired"></i>
-                        <h4>Administrer les réseaux et l'internet</h4>
-                        <p>Configuration, maintenance et sécurisation des infrastructures réseau</p>
-                    </a>
-                    <a href="comp2.html" class="competence-card">
-                        <i class="fas fa-plug"></i>
-                        <h4>Connecter les entreprises et les usages</h4>
-                        <p>Mise en place de solutions de connectivité adaptées aux besoins</p>
-                    </a>
-                    <a href="comp3.html" class="competence-card">
-                        <i class="fas fa-code"></i>
-                        <h4>Créer des outils et applications pour les RT</h4>
-                        <p>Développement d'applications dédiées aux réseaux et télécoms</p>
-                    </a>
+            <div style="background:#000; border:1px solid #444; border-radius:4px; overflow:hidden; cursor:pointer;" onclick="openModal('', true, 'Image/Log.jpg')">
+                <img src="Image/Log.jpg" alt="Logs Système" style="width:100%; height:200px; object-fit:cover; opacity:0.9;">
+                <div style="padding:8px; border-top:1px solid #333;">
+                    <div style="color:#FFD700; font-size:0.75rem; font-weight:bold;">2. JOURNAL D'EXÉCUTION</div>
+                    <p style="color:#aaa; font-size:0.7rem; margin:3px 0;">
+                        Preuve de fonctionnement : La macro se déclenche en temps réel.
+                    </p>
                 </div>
             </div>
-        </section>
-
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-content">
-                <p>&copy; 2025 SCHER Florian - Portfolio Réseaux et Télécommunications</p>
+            <div style="background:#000; border:1px solid #444; border-radius:4px; overflow:hidden; cursor:pointer;" onclick="openModal('', true, 'Image/conf.jpg')">
+                <img src="Image/conf.jpg" alt="Réglages EDS" style="width:100%; height:200px; object-fit:cover; opacity:0.9;">
+                <div style="padding:8px; border-top:1px solid #333;">
+                    <div style="color:#FFD700; font-size:0.75rem; font-weight:bold;">3. CONFIGURATION CRYPTO</div>
+                    <p style="color:#aaa; font-size:0.7rem; margin:3px 0;">
+                        Paramétrage du conteneur : Algorithme SHA-512 et chemin d'accès SD.
+                    </p>
+                </div>
             </div>
-        </footer>
+            <div style="background:#000; border:1px solid #444; border-radius:4px; overflow:hidden; cursor:pointer;" onclick="openModal('', true, 'Image/Vue_conteneur.jpg')">
+                <img src="Image/Vue_conteneur.jpg" alt="Explorateur EDS" style="width:100%; height:200px; object-fit:cover; opacity:0.9;">
+                <div style="padding:8px; border-top:1px solid #333;">
+                    <div style="color:#FFD700; font-size:0.75rem; font-weight:bold;">4. CONTENU SÉCURISÉ</div>
+                    <p style="color:#aaa; font-size:0.7rem; margin:3px 0;">
+                        Vue intérieure du conteneur monté : Dossiers isolés du système Android.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:15px; background:#220000; padding:10px; border-left:3px solid #ff4444; border-radius:0 4px 4px 0;">
+            <strong style="color:#ff4444; font-size:0.8rem;"><i class="fas fa-exclamation-triangle"></i> RETOUR D'EXPÉRIENCE (REX)</strong>
+            <p style="font-size:0.8rem; color:#ccc; margin:5px 0 0 0;">
+                Les tests confirment que la fonction de suppression automatique (si le conteneur est fermé) est critique. Elle est actuellement fonctionnelle mais nécessite une vigilance accrue sur les permissions Android 7 pour éviter les blocages système.
+            </p>
+        </div>
+    </div>
+
+    <div style="background:rgba(255, 215, 0, 0.05); padding:15px; border-radius:4px; margin-top:20px; border:1px solid #333; border-left: 4px solid #FFD700; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+        <div>
+            <h4 style="color:#FFD700; margin:0 0 5px 0; font-size:1rem;">
+                <i class="fas fa-file-shield"></i> PREUVE DE VALIDATION
+            </h4>
+            <div style="color:#aaa; font-size:0.8rem; line-height:1.4;">
+                Rapport technique complet : EDS Lite & MacroDroid.<br>
+                <span style="color:#666;">Document PDF</span>
+            </div>
+        </div>
+        
+        <a href="Rapport de la maquette de Chiffrement des cartes SD des tablettes.pdf" target="_blank" style="text-decoration: none;">
+            <button 
+                onmouseover="this.style.background='#FFD700'; this.style.color='#000'; this.style.boxShadow='0 0 15px rgba(255, 215, 0, 0.4)'" 
+                onmouseout="this.style.background='transparent'; this.style.color='#FFD700'; this.style.boxShadow='none'" 
+                style="
+                    background: transparent;
+                    border: 1px solid #FFD700;
+                    color: #FFD700;
+                    padding: 10px 20px;
+                    font-family: 'Share Tech Mono', monospace;
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    text-transform: uppercase;
+                    border-radius: 2px;
+                    display:flex; align-items:center; gap:10px;
+                ">
+                <i class="fas fa-download"></i> TÉLÉCHARGER LE RAPPORT
+            </button>
+        </a>
+    </div>
+
+</div>
+
+  
+       
+
+</div>
+<h4 style="color:#2a6df4; margin-bottom:10px; border-top:1px dashed #333; padding-top:10px;"><i class="fas fa-graduation-cap"></i> COMPÉTENCES CRITIQUES</h4>
+            <div style="margin-bottom:15px;">
+                <span class="edf-btn active" style="padding:5px 10px; font-size:0.8rem; display:inline-block; margin-bottom:5px; background:rgba(42, 109, 244, 0.2); color:#2a6df4; border:1px solid #2a6df4; border-radius:3px;">
+                    RT3 – Créer des outils et des applications informatiques pour les R&T
+                </span>
+                <ul style="font-size:0.8rem; color:#aaa; line-height:1.4; margin-top:0; padding-left:20px;">
+                    <li>Découverte de Macrodroid pour la réalisation de macro</li>
+                    <li> Script d'autonomisation de tache</li>
+                </ul>
+            </div>
+            <div style="margin-bottom:15px;">
+                <span class="edf-btn active" style="padding:5px 10px; font-size:0.8rem; display:inline-block; margin-bottom:5px; background:rgba(42, 109, 244, 0.2); color:#2a6df4; border:1px solid #2a6df4; border-radius:3px;">
+                    Connaissance Cybersécurité
+                </span>
+                <ul style="font-size:0.8rem; color:#aaa; line-height:1.4; margin-top:0; padding-left:20px;">
+                    <li> Algorythme de chiffrements </li>
+                    <li> Disque Virtuel </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr; gap:15px;">
+        
+        <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:4px;">
+            <strong style="color:#fff; display:block; margin-bottom:5px;">
+                <i class="fas fa-filter" style="color:#2a6df4; margin-right:5px;"></i> 
+                Recherche autonome
+            </strong>
+            <p style="color:#aaa; font-size:0.85rem; margin:0; line-height:1.5;">
+                <strong>Constat :</strong> Travail en autonomie sur la façon de chiffrer les cartes SD malgrès les contraintes techniques des tablettes<br>
+                <strong>Analyse :</strong> La macro et le disque virtuel sont fonctionnelles 
+                 <strong> A ameliorer: </strong> Automatiser le transfert de fichiers automatique en déclanchant la macro toutes les minutes
+        </div>
+    </div>
+</div>
+        
+    <div style="margin-top: 50px; border-top: 3px double #2a6df4; padding-top: 30px; font-family: 'Rajdhani', sans-serif;">
+        <h1 style="font-size:2.2rem; margin-bottom:30px; font-family:'Orbitron'; color:#fff; text-align:center; text-shadow: 0 0 10px rgba(42, 109, 244, 0.5);">
+            <i class="fas fa-chart-bar"></i> 4. BILAN PAR COMPÉTENCES
+        </h1>
+
+        <div class="edf-grid-2">
+            
+            <div class="edf-card" style="border-left: 4px solid #2a6df4;">
+                <div style="display:flex; justify-content:space-between; align-items:start;">
+                    <strong style="color:#fff; font-size:1.1rem; text-transform:uppercase;">RT1 : Administrer les réseaux et l'Internet</strong>
+                    <span style="background:#2a6df4; color:#fff; padding:2px 8px; font-size:0.7rem; font-weight:bold; border-radius:3px;">MAÎTRISE CONSOLIDÉE</span>
+                </div>
+                <div style="margin:15px 0;">
+                    <div style="width:100%; height:6px; background:#111; border-radius:3px; overflow:hidden;">
+                        <div style="width:75%; height:100%; background:#2a6df4; box-shadow:0 0 10px #2a6df4;"></div>
+                    </div>
+                </div>
+                <p style="font-size:0.85rem; color:#ccc; line-height:1.4;">
+                    <strong>Apport IUT :</strong> Bases fondamentales du routage (OSPF, BGP) et commutation (VLAN).<br>
+                    <strong>Apport Entreprise :</strong> Adaptation au routage satellite. Gestion des flux prioritaires (QoS) pour garantir la radio face à la data.
+                </p>
+            </div>
+
+            <div class="edf-card" style="border-left: 4px solid #00ff00;">
+                <div style="display:flex; justify-content:space-between; align-items:start;">
+                    <strong style="color:#fff; font-size:1.1rem; text-transform:uppercase;">RT2 : Connecter les entreprises et les usagers</strong>
+                    <span style="background:#00ff00; color:#000; padding:2px 8px; font-size:0.7rem; font-weight:bold; border-radius:3px;">FORTE VALEUR AJOUTÉE</span>
+                </div>
+                <div style="margin:15px 0;">
+                    <div style="width:100%; height:6px; background:#111; border-radius:3px; overflow:hidden;">
+                        <div style="width:90%; height:100%; background:#00ff00; box-shadow:0 0 10px #00ff00;"></div>
+                    </div>
+                </div>
+                <p style="font-size:0.85rem; color:#ccc; line-height:1.4;">
+                    <strong>Apport IUT :</strong> Théorie des transmissions et numérisation du signal.<br>
+                    <strong>Apport Entreprise :</strong> Maîtrise des infrastructures critiques (TETRA, Iridium, VSAT). Gestion des contraintes physiques extrêmes (Bâtiment Réacteur / Cage de Faraday).
+                </p>
+            </div>
+
+            <div class="edf-card" style="border-left: 4px solid #FE5800;">
+                <div style="display:flex; justify-content:space-between; align-items:start;">
+                    <strong style="color:#fff; font-size:1.1rem; text-transform:uppercase;">RT3 : Créer des outils et applications informatiques</strong>
+                    <span style="background:#FE5800; color:#fff; padding:2px 8px; font-size:0.7rem; font-weight:bold; border-radius:3px;">EN DÉVELOPPEMENT</span>
+                </div>
+                <div style="margin:15px 0;">
+                    <div style="width:100%; height:6px; background:#111; border-radius:3px; overflow:hidden;">
+                        <div style="width:65%; height:100%; background:#FE5800; box-shadow:0 0 10px #FE5800;"></div>
+                    </div>
+                </div>
+                <p style="font-size:0.85rem; color:#ccc; line-height:1.4;">
+                    <strong>Apport IUT :</strong> Scripting Bash et Python, programmation réseau.<br>
+                    <strong>Apport Entreprise :</strong> Automatisation de la sécurisation des tablettes via MacroDroid. Traduction des besoins métier en exigences logicielles concrètes.
+                </p>
+            </div>
+
+            <div class="edf-card" style="border-left: 4px solid #fff; background:rgba(255,255,255,0.05);">
+                <div style="display:flex; justify-content:space-between; align-items:start;">
+                    <strong style="color:#fff; font-size:1.1rem; text-transform:uppercase;">Adaptation & Transversalité</strong>
+                    <span style="background:#fff; color:#000; padding:2px 8px; font-size:0.7rem; font-weight:bold; border-radius:3px;">SOFT SKILLS</span>
+                </div>
+                <div style="margin:15px 0; height:6px;"></div>
+                <p style="font-size:0.85rem; color:#ccc; line-height:1.4;">
+                    L'alternance m'a permis d'articuler la <strong>rigueur académique</strong> avec les <strong>exigences industrielles</strong>. Ma capacité d'adaptation a été renforcée par l'apprentissage autonome de solutions de chiffrement (VeraCrypt) pour répondre aux audits de sécurité EDF.
+                </p>
+            </div>
+        </div>
+
+        <div class="edf-grid-2" style="margin-top:20px;">
+            <div class="edf-card" style="background:#1a1000; border: 1px solid #ffcc00;">
+                <h4 style="color:#ffcc00; margin-top:0; border-bottom:1px solid rgba(255,204,0,0.3); padding-bottom:10px;">
+                    <i class="fas fa-chart-line"></i> AXES DE PROGRÈS
+                </h4>
+                <ul style="font-size:0.85rem; color:#ccc; padding-left:20px; line-height:1.6;">
+                    <li><strong>Lexique Nucléaire :</strong> Précision sémantique à parfaire lors des réunions techniques DC.</li>
+                    <li><strong>Autonomie en Scripting :</strong> Réduire la dépendance aux outils tiers pour privilégier le "Full Script".</li>
+                    <li><strong>Culture de Sûreté :</strong> Approfondir ma culture du nucléaire</li>
+                </ul>
+            </div>
+            <div class="edf-card" style="background:#001a0a; border: 1px solid #00ff00;">
+                <h4 style="color:#00ff00; margin-top:0; border-bottom:1px solid rgba(0,255,0,0.3); padding-bottom:10px;">
+                    <i class="fas fa-bullseye"></i> PLAN D'ACTION
+                </h4>
+                <ul style="font-size:0.85rem; color:#ccc; padding-left:20px; line-height:1.6;">
+                    <li><strong>Veille Documentaire :</strong> Étude approfondie de l'infrasctuture de la FARN.</li>
+                    <li><strong>Immersion SR :</strong> Multiplier les interventions en Services Régionaux pour forger l'expérience.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+                    
+                `;
+            }
+        }
+        // --- SIMULATED LOGS ---
+        const logMessages = [
+            "Check liaison VSAT Station Nord... OK (-45dBm)",
+            "Ping Relais TETRA R42... 12ms",
+            "Synchronisation NTP Serveur Temps... OK",
+            "Alerte Température Salle Serveur B... 24°C (Normal)",
+            "Authentification Agent 402... SUCCÈS",
+            "Scan vulnérabilité vlan 20... EN COURS",
+            "Mise à jour table de routage OSPF... FAIT"
+        ];
+
+        function startLogs() {
+            const container = document.getElementById('live-logs');
+            if (!container) return;
+
+            setInterval(() => {
+                if (!document.getElementById('live-logs')) return; // Safety check if view changed
+                const msg = logMessages[Math.floor(Math.random() * logMessages.length)];
+                const time = new Date().toLocaleTimeString();
+                const div = document.createElement('div');
+                div.className = 'log-entry';
+                div.innerHTML = `<span style="color:#666">[${time}]</span> ${msg}`;
+                document.getElementById('live-logs').prepend(div);
+
+                // Limit history
+                if (document.getElementById('live-logs').children.length > 6) {
+                    document.getElementById('live-logs').lastChild.remove();
+                }
+            }, 2000);
+        }
+
+        // --- LINUX LOGIC ---
+        function openWindow(id) {
+            document.querySelectorAll('.window').forEach(w => w.style.display = 'none');
+            const win = document.getElementById('win-' + id);
+            if (win) win.style.display = 'flex';
+        }
+
+        function closeWindow(id) {
+            document.getElementById('win-' + id).style.display = 'none';
+        }
+
+        // --- UTILS (MODIFIÉ POUR GERER LES IMAGES) ---
+        function openModal(text, isImage = false, imgSrc = '') {
+            const overlay = document.getElementById('modal-overlay');
+            const title = document.getElementById('modal-title');
+            const contentText = document.getElementById('modal-text');
+            const icon = document.getElementById('modal-icon');
+
+            if (isImage && imgSrc) {
+                // Mode Image
+                title.innerText = "VISUEL TECHNIQUE";
+                if (icon) icon.style.display = 'none'; // Cache l'icône
+                // Injecte l'image
+                contentText.innerHTML = `<img src="${imgSrc}" alt="Preuve" style="max-width: 100%; max-height: 60vh; border: 2px solid #FE5800; border-radius: 4px; box-shadow: 0 0 15px rgba(254, 88, 0, 0.3);">`;
+            } else {
+                // Mode Texte normal
+                title.innerText = "DOCUMENT SÉCURISÉ";
+                if (icon) icon.style.display = 'block'; // Affiche l'icône
+                contentText.innerText = text;
+            }
+
+            overlay.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+        }
+
+        // Clocks
+        setInterval(() => {
+            const d = new Date();
+            const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            if (document.getElementById('linux-clock'))
+                document.getElementById('linux-clock').innerText = d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' }) + ' ' + timeStr;
+            if (document.getElementById('edf-clock'))
+                document.getElementById('edf-clock').innerText = timeStr;
+        }, 1000);
+
+    </script>
+    <div id="modal-galerie-fktl"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
+
+        <div
+            style="background:#111; border:2px solid #00ff00; display:flex; flex-direction:column; box-shadow:0 0 50px rgba(0,255,0,0.1); width:95%; max-width:800px; height:90%;">
+
+            <div
+                style="padding:15px 20px; background:rgba(0, 255, 0, 0.1); border-bottom:1px solid #00ff00; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
+                <span style="color:#00ff00; font-family:'Share Tech Mono'; font-weight:bold; font-size:1.1rem;">::
+                    DOSSIER_PREUVES_FKTL ::</span>
+                <span onclick="document.getElementById('modal-galerie-fktl').style.display='none'"
+                    style="color:#fff; cursor:pointer; font-size:2rem; font-weight:bold; line-height:1;">&times;</span>
+            </div>
+
+            <div style="overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:30px;">
+
+                <div style="border-bottom:1px dashed #333; padding-bottom:20px;">
+                    <h4 style="color:#fff; margin-top:0; border-left:3px solid #FE5800; padding-left:10px;">
+                        <i class="fas fa-user-astronaut" style="color:#FE5800;"></i> MISE EN SITUATION (Supervisée)
+                    </h4>
+                    <p style="color:#aaa; font-size:0.8rem; margin-bottom:10px;">Déploiement et configuration BGAN
+                        au agent FARN sous la supervision de mon tuteur.</p>
+                    <img src="/Image/moi_formation.jpg" style="width:100%; border-radius:4px; border:1px solid #444;">
+                </div>
+
+                <div>
+                    <h4 style="color:#fff; margin-top:0; border-left:3px solid #00ff00; padding-left:10px;">
+                        <i class="fas fa-clipboard-check" style="color:#00ff00;"></i> DOCUMENTS DE VALIDATION
+                    </h4>
+                    <p style="color:#aaa; font-size:0.8rem; margin-bottom:10px;">Feuilles de suivi de formation et
+                        émargement.</p>
+
+                    <div style="display:grid; grid-template-columns: 1fr; gap:15px;">
+                        <img src="Image/fktl.jpg" style="width:100%; border-radius:4px; border:1px solid #444;">
+
+                        <img src="Image/aka.jpg" style="width:100%; border-radius:4px; border:1px solid #444;">
+
+                        <img src="Image/forma_pc.jpg" style="width:100%; border-radius:4px; border:1px solid #444;">
+                    </div>
+                </div>
+
+                <div
+                    style="text-align:center; margin-top:20px; color:#555; font-family:'Share Tech Mono'; font-size:0.8rem;">
+                    --- FIN DU DOSSIER DE PREUVE ---
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
