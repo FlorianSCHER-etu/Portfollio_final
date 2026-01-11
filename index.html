@@ -889,7 +889,7 @@
                 <div style="background: #15171a; border: 1px solid #333; padding: 12px; border-radius: 4px;">
                     <h3 style="color:#2db8ff; font-size: 0.8rem; border-bottom: 1px solid #2db8ff; padding-bottom: 5px; margin-top:0;">S1 : INITIALISATION RÉSEAUX</h3>
                     <ul style="font-size: 0.75rem; line-height: 1.5; color:#aaa; padding-left: 15px;">
-                        <li><strong>Protocoles :</strong> Modèle OSI, IPv4/IPv6, ICMP.</li>
+                        <li><strong>Protocoles :</strong> Modèle OSI, IPv4/IPv6, ICMP, TCP, UDP.</li>
                         <li><strong>Physique :</strong> Câblage VDI, Réflectométrie, RF.</li>
                         <li><strong>Système :</strong> Linux CLI, Gestion des permissions.</li>
                     </ul>
@@ -898,8 +898,8 @@
                 <div style="background: #15171a; border: 1px solid #333; padding: 12px; border-radius: 4px;">
                     <h3 style="color:#2db8ff; font-size: 0.8rem; border-bottom: 1px solid #2db8ff; padding-bottom: 5px; margin-top:0;">S2 : ROUTAGE & SERVICES</h3>
                     <ul style="font-size: 0.75rem; line-height: 1.5; color:#aaa; padding-left: 15px;">
-                        <li><strong>Routage :</strong> OSPFv2, RIPv2, Routage statique.</li>
-                        <li><strong>Services :</strong> DNS (Bind9), DHCP, Apache2.</li>
+                        <li><strong>Routage :</strong> OSPF, RIP, Routage statique, NAT/PAT.</li>
+                        <li><strong>Services :</strong> DHCP, Apache2.</li>
                         <li><strong>Com :</strong> ToIP (SIP), VoIP Codecs, QoS.</li>
                     </ul>
                 </div>
@@ -907,8 +907,10 @@
                 <div style="background: #15171a; border: 1px solid #333; padding: 12px; border-radius: 4px;">
                     <h3 style="color:#2db8ff; font-size: 0.8rem; border-bottom: 1px solid #2db8ff; padding-bottom: 5px; margin-top:0;">S3 : WAN & SÉCURITÉ</h3>
                     <ul style="font-size: 0.75rem; line-height: 1.5; color:#aaa; padding-left: 15px;">
-                        <li><strong>WAN :</strong> BGP (eBGP/iBGP), NAT/PAT.</li>
-                        <li><strong>Sécu :</strong> VPN IPSec, Firewalling Netfilter/iptables.</li>
+                        <li><strong>WAN :</strong> BGP (eBGP/iBGP), MPLS .</li>
+                        <li><strong > Service : </strong> DNS, SMTP </li>
+                        <li><strong>Sécu :</strong> Pentest, Kerberos, DNSSEC</li>
+                        <li><strong>Interconnexion :</strong> Fibre optique, FTTH, OADM</li>
                         <li><strong>Dev :</strong> Automatisation Python & Bash.</li>
                     </ul>
                 </div>
@@ -1576,7 +1578,7 @@
 
             <div class="edf-card" style="border-top: 1px solid #333; margin-top:20px; background:rgba(255, 255, 255, 0.02); padding-top:15px;">
                 <h3 style="color:#fff; margin:0 0 20px 0; border-bottom:1px dashed #555; padding-bottom:10px;">
-                    <i class="fas fa-search-plus" style="color:#FE5800;"></i> ZOOM SUR LES MOYENS DE PROJECTION
+                    <i class="fas fa-search-plus" style="color:#FE5800;"></i> ZOOM SUR LES MOYENS Telecoms
                 </h3>
 
                 <div class="edf-grid-2">
@@ -1643,7 +1645,7 @@
                                     </div>
                                     <div style="color:#ccc; border-left:1px solid #333; padding-left:10px;">
                                         <i class="fas fa-shield-alt" style="color:#00ff00;"></i> <strong>RÔLE FARN :</strong><br>
-                                        Assurer la phonie de groupe sécurisée sur le chantier. Indispensable car les murs du CNPE (Béton armé) bloquent les ondes : le relais Remorque permet de "passer" les obstacles.
+                                       Assurer les communications radio entre les agents et les chefs de colonne, et entre les chefs de colonnes et le FARN C. Ce relais tetra est Indispensable car les murs du CNPE (Béton armé) bloquent les ondes. De plus se relais permets l'émisssion à 30 km des communications carla FARN ne possèdent pas de radio longues distances pour le moment.
                                     </div>
                                 </div>
                             </div>
@@ -1657,11 +1659,11 @@
                                     <div style="color:#ccc;">
                                         <i class="fas fa-cogs" style="color:#2a6df4;"></i> <strong>FONCTIONNEMENT :</strong><br>
                                         Liaison vers satellite Géostationnaire (36000km). Bande KA (Hautes fréquences).
-                                        <br><em>Pointage :</em> Automatique précis requis. Sensible à la météo (pluie).
+                                        <br><em>Pointage :</em> Automatique précis requis. Sensible à la météo (pluie) et au vents, la parabole n'est pas déployable si la vitesse du vents est supérieurs à 80 kmh. En cas de panne, il y la possibilités de diriger manuellement laparabolle vers le satellite.
                                     </div>
                                     <div style="color:#ccc; border-left:1px solid #333; padding-left:10px;">
                                         <i class="fas fa-shield-alt" style="color:#2a6df4;"></i> <strong>RÔLE FARN :</strong><br>
-                                        Le "Tuyau Principal". C'est le seul moyen de faire passer le gros volume de Data (Intranet, Visio, Mails) vers Cap Ampère.
+                                       C'est l'élements central des moyens télécoms de la FARN. En effet c'est grâce à ce satellite que le FARN C peut communiquer avec les chefs de colonnes. VSAT agit comme un WAN pour la FARN, toutes les communications passe dessus pour rejoindre CAP Ampère et la base arrière. Sans ce satelitte, c'est toute les communications qui deviennt impossible car la FARN perdrait son mode INFRA sur les radio.
                                     </div>
                                 </div>
                             </div>
@@ -1674,12 +1676,12 @@
                                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:0.75rem;">
                                     <div style="color:#ccc;">
                                         <i class="fas fa-cogs" style="color:#fff;"></i> <strong>FONCTIONNEMENT :</strong><br>
-                                        Constellation de satellites défilants (LEO - Basse altitude). Maillage global.
-                                        <br><em>Avantage :</em> Pas de pointage, fonctionne partout, antenne omnidirectionnelle.
+                                        Constellation de satellites défilants (Basse altitude).
+                                        <br><em>Avantage :</em> Pas de pointage, antenne omnidirectionnelle.
                                     </div>
                                     <div style="color:#ccc; border-left:1px solid #333; padding-left:10px;">
                                         <i class="fas fa-shield-alt" style="color:#fff;"></i> <strong>RÔLE FARN :</strong><br>
-                                        L'ultime secours. Quand le VSAT est HS et les relais TETRA détruits, c'est le seul moyen de signaler sa présence au National.
+                                        L'ultime secours. Quand le VSAT est HS ou les relais TETRA détruits, c'est le seul moyen de communications restant.
                                     </div>
                                 </div>
                             </div>
@@ -2916,5 +2918,6 @@
         </div>
     </div>
 </body>
+
 
 </html>
