@@ -1,4 +1,4 @@
-# 🛡️ Project Energy-OS : Portfolio d'alternant SI & TELECOM
+# 🛡️ Project Energy-OS : Portfolio d'alternant SI & TELECOM de SCHER Florian
 
 Ce projet est un portfolio interactif simulant un environnement multi-systèmes (**Multi-boot**). Il retrace mon parcours au sein du **BUT Réseaux & Télécommunications** et mon immersion opérationnelle à la **Direction de Crise (DC/FARN) d'EDF**.
 
